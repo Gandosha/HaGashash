@@ -1,0 +1,5 @@
+cmd - for commands
+pkg - for package code
+testdata - to test the files
+internal - for internal use. that only my code imports.
+docs - additional documentation
