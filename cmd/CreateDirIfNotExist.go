@@ -8,7 +8,6 @@ import (
 
 /* This function creates a directory if it does not exist. Otherwise do nothing. */
 func CreateDirIfNotExist(dir string) {
-	fmt.Println("\n\n[!] Creating a directory for the project...")
 	nmapCmd := exec.Command("bash", "-c", "sudo mkdir -p " + dir)
     	err := nmapCmd.Start()
     	if err != nil {
@@ -18,7 +17,7 @@ func CreateDirIfNotExist(dir string) {
 	if err != nil {
         	panic(err)
     	}
-	fmt.Println("\n\n[!] Directory created at: " + dir)
+	fmt.Println("\n\n[!] Directory created at: " + dir + ".")
 
 
 

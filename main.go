@@ -1,14 +1,12 @@
 package main
 
 import (
-	"encoding/xml"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"flag"
 	"strings"
+	"io/ioutil"
 	"Hagashash/cmd"
-	
 )
 
 
@@ -50,11 +48,11 @@ func main() {
 		//start to scan subnet
 		fmt.Println("\n[!] Starting to scan your subnet.\n")
 		var targets []string
-		var t Targets
+		//var t Targets
 		ip := cmd.WhatIsMyIP(*interfacePtr)
 		tars := cmd.AliveHostsInSubnet(targets, ip)
 		for i:= range tars {
-			path := "/home/" + userEnvVar + "/HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
+			path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
 			cmd.CreateDirIfNotExist(path)
 			cmd.NmapVulnScan(strings.Trim(tars[i],"'$'\n'"),path)
 			//Parse TCPxml
@@ -62,27 +60,29 @@ func main() {
 			if err != nil {
 				fmt.Println(err)
 			}
-			fmt.Println("Successfully Opened " + path + "/TCPxml")
+			fmt.Println("[!] Successfully opened: " + path + "/TCPxml.\n")
+			bytes, _ := ioutil.ReadAll(xmlFile)
 			defer xmlFile.Close()
-			xmldecoderOut, err := XmlDecoder(xmlFile)
+			parsed, err := cmd.Parse(bytes)
 			if err != nil {
 				fmt.Println(err)
-				os.Exit(1)
-			    }	
-			//Parse UDPxml
+			}
+			fmt.Println("[!] Successfully parsed: " + path + "/TCPxml.\n")
+			fmt.Println(parsed)			
+			/* //Parse UDPxml
 			xmlFile, err = os.Open(path + "/UDPxml")
 			if err != nil {
 				fmt.Println(err)
 			}
 			fmt.Println("Successfully Opened " + path + "/UDPxml")
 			defer xmlFile.Close()
-			xmldecoderOut, err = XmlDecoder(xmlFile)
+			add, prt, err = XmlDecoder(xmlFile)
 			if err != nil {
 				fmt.Println(err)
 				os.Exit(1)
 			    }			
-			fmt.Println(xmldecoderOut)					  			
-		}
+			fmt.Println(xmldecoderOut) */					  			
+		} /*
 		output, err := xml.MarshalIndent(t, "  ", "    ")
 		if err != nil {
 			fmt.Printf("error: %v\n", err)

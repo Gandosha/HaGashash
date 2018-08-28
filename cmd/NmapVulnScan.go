@@ -8,7 +8,7 @@ import (
 
 /* This function performs a nmap TCP/UDP/vulnerability scan on target IP. */
 func NmapVulnScan(targetIP string, xmlPath string) {
-	fmt.Println("\n\n[!] Starting to scan " + targetIP + " for TCP ports.")
+	fmt.Println("\n\n[!] Starting to scan " + targetIP + " for TCP ports.\n")
 	nmapCmd := exec.Command("bash", "-c", "sudo nmap -sS -p- -T4 -Pn -vv -oX " + xmlPath + "/TCPxml " + targetIP)
     	err := nmapCmd.Start()
     	if err != nil {
