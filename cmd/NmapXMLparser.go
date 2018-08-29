@@ -1,5 +1,5 @@
-/* This code is taken from https://github.com/lair-framework/go-nmap/blob/master/nmap.go. Those guys deserve all the credit! 
-Package nmap parses Nmap XML data into a similary formed struct.*/
+/* The original code for the xml parser is taken from https://github.com/lair-framework/go-nmap/blob/master/nmap.go. Those guys deserve all the credit! 
+This file parses Nmap XML data into a similary formed struct.*/
 package cmd
 
 import (
@@ -349,3 +349,35 @@ func Parse(content []byte) (*NmapRun, error) {
 	err := xml.Unmarshal(content, r)
 	return r, err
 }
+
+/* This function extracts TCP/UDP ports from NmapRun struct.
+Function gets a string to extract the ports from and returns a slice of all ports in TCP or UDP that are ment to be scanned in NmapVulnScan(). 
+func ExtractPorts(extractFroMe *NmapRun, protocolPorts2Extract string) {
+	//var ports2Scan []string
+	switch {
+	case protocolPorts2Extract == "TCP": 
+		tcpWordIndex := bytes.Index(extractFroMe, protocolPorts2Extract)
+		if tcpWordIndex != -1 {
+			structOutTrimmed := extractFroMe[tcpWordIndex+4:]
+			curlyBracesIndex := bytes.Index(structOutTrimmed, "{")
+			fmt.Println("structOutTrimmed: \n",structOutTrimmed)
+			fmt.Println("tcpWordIndex: \n",tcpWordIndex)
+			fmt.Println("curlyBracesIndex: \n\n",curlyBracesIndex)
+		}
+	}
+}
+
+
+
+
+
+
+			/*aliveHostAddress := structOutTrimmed[:hostWordIndex]
+			tcport = strings.Replace(nmapOutTrimmed, aliveHostAddress, "\n", -1) 
+			sliceOfTargets = append(sliceOfTargets, aliveHostAddress)
+			return ExtractIPs(sliceOfTargets, nmapOutTrimmed) 
+		} else {
+			return sliceOfTargets 
+		}	
+		return tcps 
+} */

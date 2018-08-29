@@ -7,6 +7,7 @@ import (
 	"strings"
 	"io/ioutil"
 	"Hagashash/cmd"
+	"github.com/fatih/structs"
 )
 
 
@@ -48,13 +49,12 @@ func main() {
 		//start to scan subnet
 		fmt.Println("\n[!] Starting to scan your subnet.\n")
 		var targets []string
-		//var t Targets
 		ip := cmd.WhatIsMyIP(*interfacePtr)
 		tars := cmd.AliveHostsInSubnet(targets, ip)
 		for i:= range tars {
 			path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
 			cmd.CreateDirIfNotExist(path)
-			cmd.NmapVulnScan(strings.Trim(tars[i],"'$'\n'"),path)
+			cmd.NmapTCPScan(strings.Trim(tars[i],"'$'\n'"),path)	//TCP scan
 			//Parse TCPxml
 			xmlFile, err := os.Open(path + "/TCPxml")
 			if err != nil {
@@ -68,35 +68,15 @@ func main() {
 				fmt.Println(err)
 			}
 			fmt.Println("[!] Successfully parsed: " + path + "/TCPxml.\n")
-			fmt.Println(parsed)			
-			/* //Parse UDPxml
-			xmlFile, err = os.Open(path + "/UDPxml")
-			if err != nil {
-				fmt.Println(err)
-			}
-			fmt.Println("Successfully Opened " + path + "/UDPxml")
-			defer xmlFile.Close()
-			add, prt, err = XmlDecoder(xmlFile)
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			    }			
-			fmt.Println(xmldecoderOut) */					  			
-		} /*
-		output, err := xml.MarshalIndent(t, "  ", "    ")
-		if err != nil {
-			fmt.Printf("error: %v\n", err)
-		}
-		os.Stdout.Write(output)
-		/*fmt.Println(t.Address)
-		fmt.Println(t.Port)	
-		fmt.Println(t)
-		for j := 0; j < len(t.Targets); j++ {
-			fmt.Println("Address: " + t.Targets[j].Address)
-			fmt.Println("Port: " + t.Targets[j].Port)
-		} */
-		
-		//export to html
-}
+			scanResultsMap := structs.Map(parsed)
+			for index := range scanResultsMap {
+				if index == "Hosts" {
+					fmt.Println("scanResultsMap[index]: ",scanResultsMap[index])
+				}
+			}	
+   			//cmd.ExtractPorts(parsed, "TCP")
+			//Write parsed var to file and extract ports using function in NmapXMLparser.go							  			
+		} 
+	}
 		
 }
