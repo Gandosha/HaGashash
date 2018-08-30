@@ -7,7 +7,7 @@ import (
 	"strings"
 	"io/ioutil"
 	"Hagashash/cmd"
-	"github.com/fatih/structs"
+	//"github.com/fatih/structs"
 )
 
 
@@ -55,25 +55,34 @@ func main() {
 			path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
 			cmd.CreateDirIfNotExist(path)
 			cmd.NmapTCPScan(strings.Trim(tars[i],"'$'\n'"),path)	//TCP scan
-			//Parse TCPxml
-			xmlFile, err := os.Open(path + "/TCPxml")
+			path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'") + "/TCPxml"	//For PortExtractor() use.
+			//cmd.PortExtractor(path)
+			xmlFile, err := os.Open(path)
 			if err != nil {
 				fmt.Println(err)
 			}
-			fmt.Println("[!] Successfully opened: " + path + "/TCPxml.\n")
+			fmt.Println("[!] Successfully opened: " + path + ".\n")
 			bytes, _ := ioutil.ReadAll(xmlFile)
 			defer xmlFile.Close()
-			parsed, err := cmd.Parse(bytes)
+			xml := string(bytes)
+			cmd.PortExtractor(xml)
+			/* parsed, err := cmd.Parse(bytes)
 			if err != nil {
 				fmt.Println(err)
 			}
 			fmt.Println("[!] Successfully parsed: " + path + "/TCPxml.\n")
-			scanResultsMap := structs.Map(parsed)
-			for index := range scanResultsMap {
+			scanResultsValues := structs.Map(parsed)
+			fmt.Printf("%#v\n", scanResultsValues["Hosts"])
+			fmt.Printf("\nValues:\n")
+			scanResultsValues2 := structs.Values(parsed)
+			fmt.Printf("%#v\n", scanResultsValues2)
+			/* for index := range scanResultsMap {
 				if index == "Hosts" {
-					fmt.Println("scanResultsMap[index]: ",scanResultsMap[index])
+					for j := 0; j < v.NumField(); j++ {
+					fmt.Println("Field: ",v.Field(j))
+					}
 				}
-			}	
+			} */	
    			//cmd.ExtractPorts(parsed, "TCP")
 			//Write parsed var to file and extract ports using function in NmapXMLparser.go							  			
 		} 
