@@ -52,39 +52,34 @@ func main() {
 		ip := cmd.WhatIsMyIP(*interfacePtr)
 		tars := cmd.AliveHostsInSubnet(targets, ip)
 		for i:= range tars {
+			var tarsTCPorts, tarsUDPorts []string
 			path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
 			cmd.CreateDirIfNotExist(path)
 			cmd.NmapTCPScan(strings.Trim(tars[i],"'$'\n'"),path)	//TCP scan
-			path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'") + "/TCPxml"	//For PortExtractor() use.
-			//cmd.PortExtractor(path)
+			path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'") + "/TCPxml"
 			xmlFile, err := os.Open(path)
 			if err != nil {
 				fmt.Println(err)
 			}
-			fmt.Println("[!] Successfully opened: " + path + ".\n")
 			bytes, _ := ioutil.ReadAll(xmlFile)
 			defer xmlFile.Close()
 			xml := string(bytes)
-			cmd.PortExtractor(xml)
-			/* parsed, err := cmd.Parse(bytes)
+			tarsTCPorts = cmd.PortExtractor(xml, tarsTCPorts)
+			path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
+			cmd.NmapUDPScan(strings.Trim(tars[i],"'$'\n'"),path)	//UDP scan
+			path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'") + "/UDPxml"
+			xmlFile, err = os.Open(path)
 			if err != nil {
 				fmt.Println(err)
 			}
-			fmt.Println("[!] Successfully parsed: " + path + "/TCPxml.\n")
-			scanResultsValues := structs.Map(parsed)
-			fmt.Printf("%#v\n", scanResultsValues["Hosts"])
-			fmt.Printf("\nValues:\n")
-			scanResultsValues2 := structs.Values(parsed)
-			fmt.Printf("%#v\n", scanResultsValues2)
-			/* for index := range scanResultsMap {
-				if index == "Hosts" {
-					for j := 0; j < v.NumField(); j++ {
-					fmt.Println("Field: ",v.Field(j))
-					}
-				}
-			} */	
-   			//cmd.ExtractPorts(parsed, "TCP")
-			//Write parsed var to file and extract ports using function in NmapXMLparser.go							  			
+			bytes, _ = ioutil.ReadAll(xmlFile)
+			defer xmlFile.Close()
+			xml = string(bytes)
+			tarsUDPorts = cmd.PortExtractor(xml, tarsUDPorts)
+			fmt.Println("IP:\n",tars[i])
+			fmt.Println("TCP Ports:\n",tarsTCPorts)
+			fmt.Println("UDP Ports:\n",tarsUDPorts)
+									  			
 		} 
 	}
 		
