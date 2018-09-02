@@ -55,9 +55,9 @@ func PortExtractor(p string, sliceOfPorts []string) []string{
 }
 	
 /* This function performs a nmap vulnerability scan against TCP/UDP ports that were discovered. */
-func NmapVulnScan(targetIP string, xmlPath string, tcpPorts string, udpPorts string) {
+func NmapVulnScan(targetIP string, nativ string, tcpPorts string, udpPorts string) {
 	fmt.Println("\n\n[!] Starting to scan " + targetIP + " for vulnerabilities.\n")
-	nmapCmd := exec.Command("bash", "-c", "sudo nmap -Pn -sV -A -pT:" + tcpPorts + ",U:" + udpPorts + " -script vuln -vv -oX " + xmlPath + "/Vulns " + targetIP)
+	nmapCmd := exec.Command("bash", "-c", "sudo nmap -Pn -sV -A -pT:" + tcpPorts + ",U:" + udpPorts + " -script vuln -vv " + targetIP + " > " + nativ + "/Vulns" )
     	err := nmapCmd.Start()
     	if err != nil {
         	panic(err)		
@@ -66,5 +66,6 @@ func NmapVulnScan(targetIP string, xmlPath string, tcpPorts string, udpPorts str
 	if err != nil {
         	panic(err)
     	}
+	fmt.Println("[!] Nmap vulnerability scanning is completed successfully.")
 }
 

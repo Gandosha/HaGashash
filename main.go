@@ -79,6 +79,9 @@ func main() {
 			fmt.Println("IP:\n",tars[i])
 			fmt.Println("TCP Ports:\n",tarsTCPorts)
 			fmt.Println("UDP Ports:\n",tarsUDPorts)
+			path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
+			fmt.Println("[!] Starting to scan " + tars[i] + " for vulns.\n")
+			cmd.NmapVulnScan(tars[i], path, tarsTCPorts, tarsUDPorts)
 									  			
 		} 
 	}
