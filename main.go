@@ -66,6 +66,7 @@ func main() {
 			xml := string(bytes)
 			tarsTCPorts = cmd.PortExtractor(xml, tarsTCPorts)
 			path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
+			cmd.NmapVulnScan(tars[i], tarsTCPorts, path, "TCP")	//TCP vuln scan
 			cmd.NmapUDPScan(strings.Trim(tars[i],"'$'\n'"),path)	//UDP scan
 			path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'") + "/UDPxml"
 			xmlFile, err = os.Open(path)
@@ -80,8 +81,7 @@ func main() {
 			fmt.Println("TCP Ports:\n",tarsTCPorts)
 			fmt.Println("UDP Ports:\n",tarsUDPorts)
 			path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
-			fmt.Println("[!] Starting to scan " + tars[i] + " for vulns.\n")
-			cmd.NmapVulnScan(tars[i], path, tarsTCPorts, tarsUDPorts)
+			cmd.NmapVulnScan(tars[i], tarsUDPorts, path, "UDP")	//UDP vuln scan
 									  			
 		} 
 	}
