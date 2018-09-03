@@ -55,17 +55,37 @@ func PortExtractor(p string, sliceOfPorts []string) []string{
 }
 	
 /* This function performs a nmap vulnerability scan against TCP/UDP ports that were discovered. */
-func NmapVulnScan(targetIP string, nativ string, tcpPorts string, udpPorts string) {
-	fmt.Println("\n\n[!] Starting to scan " + targetIP + " for vulnerabilities.\n")
-	nmapCmd := exec.Command("bash", "-c", "sudo nmap -Pn -sV -A -pT:" + tcpPorts + ",U:" + udpPorts + " -script vuln -vv " + targetIP + " > " + nativ + "/Vulns" )
-    	err := nmapCmd.Start()
-    	if err != nil {
-        	panic(err)		
-    	}
-	err = nmapCmd.Wait()	
-	if err != nil {
-        	panic(err)
-    	}
-	fmt.Println("[!] Nmap vulnerability scanning is completed successfully.")
+func NmapVulnScan(targetIP string, ports []string, nativ string, protocol string) {
+	fmt.Println("targetIP: \n",targetIP)
+	fmt.Println("nativ: \n",nativ)
+	fmt.Println("protocol: \n",protocol)
+	portss := strings.Join(ports, ",")
+	fmt.Println("Portss: \n",portss)
+	switch {
+		case protocol == "TCP": 
+			fmt.Println("\n\n[!] Starting to scan " + targetIP + " for TCP ports vulnerabilities.")
+			nmapCmd := exec.Command("bash", "-c", "sudo nmap -Pn -sV -A -pT:" + portss + " -script vuln -vv " + targetIP + " > " + nativ + "/TCP_Vulns" )
+		    	err := nmapCmd.Start()
+		    	if err != nil {
+				panic(err)		
+		    	}
+			err = nmapCmd.Wait()	
+			if err != nil {
+				panic(err)
+		    	}
+			fmt.Println("[!] Nmap TCP vulnerability scanning for " + targetIP + " is completed successfully.")
+		case protocol == "UDP": 
+			fmt.Println("\n\n[!] Starting to scan " + targetIP + " for UDP ports vulnerabilities.")
+			nmapCmd := exec.Command("bash", "-c", "sudo nmap -Pn -sV -A -pU:" + portss + " -script vuln -vv " + targetIP + " > " + nativ + "/UDP_Vulns" )
+		    	err := nmapCmd.Start()
+		    	if err != nil {
+				panic(err)		
+		    	}
+			err = nmapCmd.Wait()	
+			if err != nil {
+				panic(err)
+		    	}
+			fmt.Println("[!] Nmap UDP vulnerability scanning for " + targetIP + " is completed successfully.")
+		} 
 }
 
