@@ -69,9 +69,11 @@ func main() {
 				tarsUDPorts = cmd.PortExtractor(xml, tarsUDPorts)
 				path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
 				cmd.NmapVulnScan(tars[i], tarsUDPorts, path, "UDP")	//UDP vuln scan
+				cmd.SummaryMaker(path,*hostPtr)
 			}
 		case *interfacePtr != "nil" && *hostPtr != "nil" && *projectNamePtr != "nil" && *subnetPtr == false:	
-			var tarsTCPorts, tarsUDPorts []string
+			//var tarsTCPorts, tarsUDPorts []string		//commented out for testing only tcp
+			var tarsTCPorts []string
 			path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + *hostPtr
 			cmd.CreateDirIfNotExist(path)
 			cmd.NmapTCPScan(*hostPtr,path)	//TCP scan
@@ -86,7 +88,7 @@ func main() {
 			tarsTCPorts = cmd.PortExtractor(xml, tarsTCPorts)
 			path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + *hostPtr
 			cmd.NmapVulnScan(*hostPtr, tarsTCPorts, path, "TCP")	//TCP vuln scan
-			cmd.NmapUDPScan(*hostPtr,path)	//UDP scan
+			/* cmd.NmapUDPScan(*hostPtr,path)	//UDP scan
 			path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + *hostPtr + "/UDPxml"
 			xmlFile, err = os.Open(path)
 			if err != nil {
@@ -96,11 +98,9 @@ func main() {
 			defer xmlFile.Close()
 			xml = string(bytes)
 			tarsUDPorts = cmd.PortExtractor(xml, tarsUDPorts)
-			fmt.Println("IP:\n",*hostPtr)
-			fmt.Println("TCP Ports:\n",tarsTCPorts)
-			fmt.Println("UDP Ports:\n",tarsUDPorts)
 			path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + *hostPtr
-			cmd.NmapVulnScan(*hostPtr, tarsUDPorts, path, "UDP")	//UDP vuln scan
+			cmd.NmapVulnScan(*hostPtr, tarsUDPorts, path, "UDP")	//UDP vuln scan */
+			cmd.SummaryMaker(path,*hostPtr)
 		/*case *dnsPtr == true:
 			//start fierce */					  			
 	}
