@@ -2,7 +2,7 @@
 
 **Installation:**
 * Git clone to /root/src/.
-* Run with sudo.
+* Run with root.
 
 **My implementation sucks? Feel free to:**
 * Not use it.
