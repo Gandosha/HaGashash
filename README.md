@@ -1,17 +1,16 @@
 # HaGashash
 
-Installation:
+**Installation:**
 * Git clone to /root/src/.
 * Run with sudo.
 
-My implementation sucks?
-Feel free to:
+**My implementation sucks? Feel free to:**
+* Not use it.
+* Show me how to do it better.
 
-    Not use it.
-    Show me how to do it better.
+----------------------------------------------------------
 
-
-TODO:
+**TODO:**
 * Whois
 * DNS Enum
 * Email harvesting
