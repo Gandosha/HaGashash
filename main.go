@@ -33,7 +33,7 @@ func main() {
 			fmt.Println("\n")
 			os.Exit(1)
 		case *hostPtr == "nil" && *subnetPtr == false && *subnetsPtr == false:
-			fmt.Println("\n\n[!] Please specify the target. (Ex. -host=example.com or -subnet=true)\n\n")	
+			fmt.Println("\n\n[!] Please specify the target. (Ex. -host=example.com or -subnet=true or -subnets=true)\n\n")	
 			flag.PrintDefaults()
 			fmt.Println("\n")
 			os.Exit(1)
