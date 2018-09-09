@@ -10,7 +10,7 @@ import (
 
 /* This function performs a basic nmap TCP scan on target IP. */
 func NmapTCPScan(targetIP string, xmlPath string) {
-	fmt.Println("\n\n[!] Starting to scan " + targetIP + " for TCP ports.\n\n")
+	fmt.Println("\n\n[!] Starting to scan " + targetIP + " for TCP ports.\n")
 	nmapCmd := exec.Command("bash", "-c", "sudo nmap -sS -p- -T4 -Pn -vv -oX " + xmlPath + "/TCPxml " + targetIP)
     	err := nmapCmd.Start()
     	if err != nil {
@@ -24,7 +24,7 @@ func NmapTCPScan(targetIP string, xmlPath string) {
 
 /* This function performs a basic nmap UDP scan on target IP. */
 func NmapUDPScan(targetIP string, xmlPath string) {
-	fmt.Println("\n\n[!] Starting to scan " + targetIP + " for UDP ports.\n\n")
+	fmt.Println("\n\n[!] Starting to scan " + targetIP + " for UDP ports.\n")
 	nmapCmd := exec.Command("bash", "-c", "sudo nmap -sU -p- -T4 -Pn -vv -oX " + xmlPath + "/UDPxml " + targetIP)
     	err := nmapCmd.Start()
     	if err != nil {
@@ -57,7 +57,7 @@ func NmapVulnScan(targetIP string, ports []string, nativ string, protocol string
 	portss := strings.Join(ports, ",")
 	switch {
 		case protocol == "TCP": 
-			fmt.Println("\n\n[!] Starting to scan " + targetIP + " for TCP ports vulnerabilities.\n\n")
+			fmt.Println("\n[!] Starting to scan " + targetIP + " for TCP ports vulnerabilities.")
 			nmapCmd := exec.Command("bash", "-c", "sudo nmap -Pn -sV -A -pT:" + portss + " -script vuln -vv " + targetIP + " -oN " + nativ + "/TCP_Vulns")
 		    	err1 := nmapCmd.Start()
 		    	if err1 != nil {
@@ -67,9 +67,9 @@ func NmapVulnScan(targetIP string, ports []string, nativ string, protocol string
 			if err2 != nil {
 				panic(err2)
 		    	}
-			fmt.Println("\n\n[!] Nmap TCP vulnerability scanning for " + targetIP + " is completed successfully.\n\n")
+			fmt.Println("\n[!] Nmap TCP vulnerability scanning for " + targetIP + " is completed successfully.")
 		case protocol == "UDP": 
-			fmt.Println("\n\n[!] Starting to scan " + targetIP + " for UDP ports vulnerabilities.\n\n")
+			fmt.Println("\n[!] Starting to scan " + targetIP + " for UDP ports vulnerabilities.")
 			nmapCmd := exec.Command("bash", "-c", "sudo nmap -Pn -sV -A -pU:" + portss + " -script vuln -vv " + targetIP + " -oN " + nativ + "/UDP_Vulns")
 		    	err1 := nmapCmd.Start()
 		    	if err1 != nil {
@@ -79,7 +79,7 @@ func NmapVulnScan(targetIP string, ports []string, nativ string, protocol string
 			if err2 != nil {
 				panic(err2)
 		    	}
-			fmt.Println("\n\n[!] Nmap UDP vulnerability scanning for " + targetIP + " is completed successfully.\n\n")
+			fmt.Println("\n[!] Nmap UDP vulnerability scanning for " + targetIP + " is completed successfully.")
 		} 
 }
 
