@@ -4,6 +4,7 @@ import (
 	"fmt"
  	"os/exec"
  	"strings"
+	"github.com/fatih/color"
 )
 
 
@@ -48,7 +49,7 @@ func AliveHostsInSubnet(ipAddressesSlice []string, myIpAddress string) []string 
     	fmt.Println(" ")
 	nmapOutput := string(nmapOut)
 	targets := ExtractIPs(ipAddressesSlice, nmapOutput)
-	fmt.Println("[+] Alive hosts in " + subnetToScan + "/24 are:\n")
+	color.Cyan("[+] Alive hosts in " + subnetToScan + "/24 are:\n")
 	for k := range targets {
 		fmt.Println(targets[k])
    	}
@@ -76,7 +77,7 @@ func AliveHostsInAllSubnets(ipAddressesSlice []string, myIpAddress string) []str
     	fmt.Println(" ")
 	nmapOutput := string(nmapOut)
 	targets := ExtractIPs(ipAddressesSlice, nmapOutput)
-	fmt.Println("[+] Alive hosts in " + subnetToScan + "/24 are:\n")
+	color.Cyan("[+] Alive hosts in " + subnetToScan + "/24 are:\n")
 	for k := range targets {
 		fmt.Println(targets[k])
    	}

@@ -1,9 +1,9 @@
 package cmd
 
 import (
-    "fmt"
     "io/ioutil"
     "os"
+    "github.com/fatih/color"
 )
 
 /* This function checks for errors */
@@ -40,7 +40,7 @@ func SummaryMaker(projectDirPath string,targetIP string) {
 	_, err = sumFile.Write([]byte(udpVulnFileBytes))
 	check(err)
 	sumFile.Sync()
-	fmt.Printf("\n\n[!] Summary file for " + targetIP + " is ready.\n\n")
+	color.Cyan("\n\n[!] Summary file for " + targetIP + " is ready.\n\n")
 	//Delete unnecessary files
 	err = os.Remove(projectDirPath + "/TCP_Vulns")
 	check(err)

@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"fmt"
 	"os/exec"
+	"github.com/fatih/color"
 )
 
 
@@ -17,7 +17,7 @@ func CreateDirIfNotExist(dir string) {
 	if err != nil {
         	panic(err)
     	}
-	fmt.Println("\n\n[!] Directory created at: " + dir + ".")
+	color.Cyan("[!] Directory created at: " + dir + ".")
 
 
 
