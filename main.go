@@ -10,7 +10,9 @@ import (
 	"github.com/fatih/color"
 )
 
-func main() {	
+func main() {
+	fmt.Println("\n")
+	cmd.Init()	
 	userEnvVar := os.Getenv("SUDO_USER")
 	projectNamePtr := flag.String("project", "nil", "Name of the project. (Required! It will create project's folder in /home/" + userEnvVar + "/HaGashash_Temp/).")
 	interfacePtr := flag.String("interface", "nil", "Name of the interface to use (Required! Run ifconfig before HaGashash in order to choose one).")
