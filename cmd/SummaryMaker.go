@@ -15,7 +15,8 @@ func check(e error) {
 
 /* This function gets TCP_vuln & UDP_vuln files and creates a summary file. */
 func SummaryMaker(projectDirPath string,targetIP string) {
-	seperation := "\n\n-----------------------------------------------------------------------------------------------------------------------\n\n"
+	seperationTCP := "\n\n--------------------------------------------------------------------------------T-C-P--------------------------------------------------------------------------------\n\n"
+	seperationUDP := "\n\n--------------------------------------------------------------------------------U-D-P--------------------------------------------------------------------------------\n\n"
 	//Open and read TCP_Vulns
 	tcpVulnFile, err := os.Open(projectDirPath + "/TCP_Vulns")
 	check(err)
@@ -26,17 +27,20 @@ func SummaryMaker(projectDirPath string,targetIP string) {
 	check(err1)
 	udpVulnFileBytes, _ := ioutil.ReadAll(udpVulnFile)
 	defer udpVulnFile.Close()
-	//Create the summary file and write tcpVulnFileBytes,seperation,udpVulnFileBytes to it.
-	sumFile, err2 := os.Create(projectDirPath + "/Summary")
-    	check(err2)
-    	err = ioutil.WriteFile(projectDirPath + "/Summary", tcpVulnFileBytes, 0644)
+	//Create the summary file and write seperationTCP,tcpVulnFileBytes,seperationUDP,udpVulnFileBytes to it.
+	sumFile, err := os.OpenFile(projectDirPath + "/Summary", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
     	check(err)
-	_, err = sumFile.WriteString(seperation)
-    	check(err)
-	err = ioutil.WriteFile(projectDirPath + "/Summary", udpVulnFileBytes, 0644)
-    	check(err)
+    	defer sumFile.Close()
+	_, err = sumFile.Write([]byte(seperationTCP))
+	check(err)
+	_, err = sumFile.Write([]byte(tcpVulnFileBytes))
+	check(err)
+	_, err = sumFile.Write([]byte(seperationUDP))
+	check(err)
+	_, err = sumFile.Write([]byte(udpVulnFileBytes))
+	check(err)
 	sumFile.Sync()
-	fmt.Printf("Summary file for " + targetIP + " is ready.")
+	fmt.Printf("\n\n[!] Summary file for " + targetIP + " is ready.\n\n")
 	//Delete unnecessary files
 	err = os.Remove(projectDirPath + "/TCP_Vulns")
 	check(err)
