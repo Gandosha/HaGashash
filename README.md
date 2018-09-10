@@ -1,16 +1,10 @@
 # HaGashash
 
 **Installation:**
-* Git clone to /root/src/.
+* go get https://github.com/Gandosha/HaGashash
+* go get https://github.com/fatih/color
 * Run with root.
 
 **My implementation sucks? Feel free to:**
 * Not use it.
 * Show me how to do it better.
-
-----------------------------------------------------------
-
-**TODO:**
-* Whois
-* DNS Enum
-* Email harvesting
