@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 	"os"
 	"flag"
 	"strings"
@@ -11,18 +12,16 @@ import (
 )
 
 func main() {
-	fmt.Println("\n")
+	start := time.Now()
+	fmt.Println("\n<-=|HaGashash by Gandosha|=->\n")
 	cmd.Init()	
 	userEnvVar := os.Getenv("SUDO_USER")
 	projectNamePtr := flag.String("project", "nil", "Name of the project. (Required! It will create project's folder in /home/" + userEnvVar + "/HaGashash_Temp/).")
 	interfacePtr := flag.String("interface", "nil", "Name of the interface to use (Required! Run ifconfig before HaGashash in order to choose one).")
 	hostPtr := flag.String("host", "nil", "Scan only this host (Type its IP address or domain name).")
-	hostsPtr := flag.String("hosts", "nil", "Scan only ip addresses that are mentioned in the list (Specify path for the file. Ex. /root/temp/targets. The addresses inside the file should be in Line-By-Line form).")
+	hostsPtr := flag.String("hosts", "nil", "Scan only ip addresses that are mentioned in the list (Ex. /root/temp/targets. Path for host list to scan in Line-By-Line form).")
 	subnetPtr := flag.Bool("subnet", false, "Discover alive hosts in your current subnet and scan them.")
 	subnetsPtr := flag.Bool("subnets", false, "Discover alive hosts all subnets and scan them.")
-	/*dnsPtr := flag.Bool("dns", false, "Locate non-contiguous IP space and hostnames against specified domain. (Type "true" or "false").")
-	nmap spoof
-	nmap decoy*/
 	flag.Parse()
 	switch {
 		case *interfacePtr == "nil":
@@ -158,6 +157,7 @@ func main() {
 				xml := string(bytes)
 				tarsTCPorts = cmd.PortExtractor(xml, tarsTCPorts)
 				path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
+				
 				cmd.NmapVulnScan(tars[i], tarsTCPorts, path, "TCP")	//TCP vuln scan
 				cmd.NmapUDPScan(strings.Trim(tars[i],"'$'\n'"),path)	//UDP scan
 				path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'") + "/UDPxml"
@@ -172,9 +172,9 @@ func main() {
 				path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
 				cmd.NmapVulnScan(tars[i], tarsUDPorts, path, "UDP")	//UDP vuln scan
 				cmd.SummaryMaker(path,tars[i])
-			}
-		/*case *dnsPtr == true:
-			//start fierce */					  			
+			}					  			
 	}
+	elapsed := time.Since(start)
+    	fmt.Println("HaGashash took %s", elapsed)
 		
 }
