@@ -11,7 +11,7 @@ import (
 
 
 /* This function performs a basic nmap TCP scan on target IP. */
-func NmapTCPScan(targetIP string, xmlPath string) {
+func NmapTCPScan(done chan bool, targetIP string, xmlPath string) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for TCP ports.\n\n")
 	nmapCmd := exec.Command("bash", "-c", "sudo nmap -sS -p- -T4 -Pn -vv -oX " + xmlPath + "/TCPxml " + targetIP)
     	err := nmapCmd.Start()
@@ -22,10 +22,11 @@ func NmapTCPScan(targetIP string, xmlPath string) {
 	if err != nil {
         	panic(err)
     	}
+	done <- true
 }
 
 /* This function performs a basic nmap UDP scan on target IP. */
-func NmapUDPScan(targetIP string, xmlPath string) {
+func NmapUDPScan(done chan bool, targetIP string, xmlPath string) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for UDP ports.\n\n")
 	nmapCmd := exec.Command("bash", "-c", "sudo nmap -sU -p- -T4 -Pn -vv -oX " + xmlPath + "/UDPxml " + targetIP)
     	err := nmapCmd.Start()
@@ -36,6 +37,7 @@ func NmapUDPScan(targetIP string, xmlPath string) {
 	if err != nil {
         	panic(err)
     	}
+	done <- true
 }
 
 /* This recursive function gets nmap's xml file as a string and returns a slice of TCP or UDP ports that are mentioned inside. */
@@ -55,7 +57,7 @@ func PortExtractor(p string, sliceOfPorts []string) []string{
 }
 	
 /* This function performs a nmap vulnerability scan against TCP/UDP ports that were discovered. */
-func NmapVulnScan(targetIP string, ports []string, nativ string, protocol string) {
+func NmapVulnScan(done chan bool, targetIP string, ports []string, nativ string, protocol string) {
 	portss := strings.Join(ports, ",")
 	switch {
 		case protocol == "TCP": 
@@ -69,6 +71,7 @@ func NmapVulnScan(targetIP string, ports []string, nativ string, protocol string
 			if err2 != nil {
 				panic(err2)
 		    	}
+			done <- true
 			color.Cyan("\n\n[!] Nmap TCP vulnerability scanning for " + targetIP + " is completed successfully.\n\n")
 		case protocol == "UDP": 
 			color.Green("\n\n[!] Starting to scan " + targetIP + " for UDP ports vulnerabilities.\n\n")
@@ -77,10 +80,12 @@ func NmapVulnScan(targetIP string, ports []string, nativ string, protocol string
 		    	if err1 != nil {
 				panic(err1)		
 		    	}
+			
 			err2 := nmapCmd.Wait()	
 			if err2 != nil {
 				panic(err2)
 		    	}
+			done <- true
 			color.Cyan("\n\n[!] Nmap UDP vulnerability scanning for " + targetIP + " is completed successfully.\n\n")
 		} 
 }
