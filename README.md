@@ -25,9 +25,9 @@
 * **(Multiple hosts scan from a list)** go run main.go -hosts=/root/temp/targets -interface=enp0s3 -project=example2
 * **(Scan hosts that are on your current subnet)** go run main.go -subnet=true -interface=enp0s3 -project=example3
 * **(Scan hosts in all subnets)** go run main.go -subnets=true -interface=enp0s3 -project=example3
----------------------------------------------------------------------------------------------------------------------------
+
 The tool creates a summary file inside target's directory (Ex. /home//HaGashash_Temp/example_project/192.168.0.1/Summary). 
----------------------------------------------------------------------------------------------------------------------------
+
 **My implementation sucks? Feel free to:**
 * Not use it.
 * Show me how to do it better.
