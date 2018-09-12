@@ -1,4 +1,5 @@
 # HaGashash
+*A concurrent vulnerability scanner based on Nmap.*
 
 **Installation:**
 * go get https://github.com/Gandosha/HaGashash
