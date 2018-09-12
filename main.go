@@ -75,13 +75,12 @@ func main() {
 				cmd.SummaryMaker(path,tars[j])
 			}	
 		case *interfacePtr != "nil" && *hostPtr != "nil" && *projectNamePtr != "nil" && *subnetPtr == false && *subnetsPtr == false && *hostsPtr == "nil":
-			color.Green("\n\n[!] Starting to perform a single host scan.\n\n")	
-			var tarsTCPorts, tarsUDPorts []string		
-			path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
+			color.Green("\n\n[!] Starting to perform a single host scan.\n\n")			
+			path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(*hostsPtr,"'$'\n'")
 			cmd.CreateDirIfNotExist(path)	//Create directory for the target
 			wg.Add(2)
-			go cmd.NmapTCPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//TCP scan
-			go cmd.NmapUDPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//UDP scan
+			go cmd.NmapTCPScan(strings.Trim(*hostsPtr,"'$'\n'"),path,&wg)	//TCP scan
+			go cmd.NmapUDPScan(strings.Trim(*hostsPtr,"'$'\n'"),path,&wg)	//UDP scan
 			wg.Wait()
 			cmd.SummaryMaker(path,*hostPtr) 
 		case *interfacePtr != "nil" && *hostPtr == "nil" && *projectNamePtr != "nil" && *subnetPtr == false && *subnetsPtr == false && *hostsPtr != "nil":
