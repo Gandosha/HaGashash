@@ -20,7 +20,7 @@
 * -subnets 
 --> Discover alive hosts all subnets and scan them.
 
-**Usage Example:**
+**Usage Examples:**
 * **(Single host scan)** go run main.go -host=192.168.1.1 -interface=enp0s3 -project=example1
 * **(Multiple hosts scan from a list)** go run main.go -hosts=/root/temp/targets -interface=enp0s3 -project=example2
 * **(Scan hosts that are on your current subnet)** go run main.go -subnet=true -interface=enp0s3 -project=example3
