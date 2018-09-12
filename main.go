@@ -5,22 +5,16 @@ import (
 	"time"
 	"os"
 	"flag"
+	"sync"
 	"strings"
-	"io/ioutil"
-	"os/exec"
 	"HaGashash/cmd"
 	"github.com/fatih/color"
 )
 
 func main() {
 	start := time.Now()
+	var wg sync.WaitGroup
 	fmt.Println("\n<-=|HaGashash by Gandosha|=->\n")
-	channel := make(chan *exec.Cmd)
-	done1 := make(chan bool)
-	done2 := make(chan bool)
-	done3 := make(chan bool)
-	done4 := make(chan bool)
-	defer close(channel)
 	cmd.Init()	
 	userEnvVar := os.Getenv("SUDO_USER")
 	projectNamePtr := flag.String("project", "nil", "Name of the project. (Required! It will create project's folder in /home/" + userEnvVar + "/HaGashash_Temp/).")
@@ -149,43 +143,19 @@ func main() {
 		case *interfacePtr != "nil" && *hostPtr == "nil" && *projectNamePtr != "nil" && *subnetPtr == false && *subnetsPtr == false && *hostsPtr != "nil":
 			color.Green("\n\n[!] Starting to scan targets that are mentioned in " + *hostsPtr + ".\n\n")
 			tars := cmd.ReadLine(*hostsPtr)
-			var tarsTCPorts, tarsUDPorts []string
+			//var tarsTCPorts, tarsUDPorts []string
 			for i:= range tars {
 				path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
-				cmd.CreateDirIfNotExist(path)
-				go cmd.NmapTCPScan(done1,strings.Trim(tars[i],"'$'\n'"),path)	//TCP scan
-				go cmd.NmapUDPScan(done2,strings.Trim(tars[i],"'$'\n'"),path)	//UDP scan
-				<-done1
-				<-done2
-				path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'") + "/UDPxml"
-				xmlFile, err := os.Open(path)
-				if err != nil {
-					fmt.Println(err)
-				}
-				bytes, _ := ioutil.ReadAll(xmlFile)
-				defer xmlFile.Close()
-				xml := string(bytes)
-				tarsUDPorts = cmd.PortExtractor(xml, tarsUDPorts)
-				path = "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'") + "/TCPxml"
-				xmlFile, err = os.Open(path)
-				if err != nil {
-					fmt.Println(err)
-				}
-				bytes, _ = ioutil.ReadAll(xmlFile)
-				defer xmlFile.Close()
-				xml = string(bytes)
-				tarsTCPorts = cmd.PortExtractor(xml, tarsTCPorts)
+				cmd.CreateDirIfNotExist(path)	//Create directory for the target
+				wg.Add(2)
+				go cmd.NmapTCPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//TCP scan
+				go cmd.NmapUDPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//UDP scan	
 			}
-			<-done1
-			<-done2
+			wg.Wait()
 			for j:= range tars {
 				path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[j],"'$'\n'")
-				go cmd.NmapVulnScan(done3,tars[j], tarsTCPorts, path, "TCP")	//TCP vuln scan
-				go cmd.NmapVulnScan(done4,tars[j], tarsUDPorts, path, "UDP")	//UDP vuln scan
 				cmd.SummaryMaker(path,tars[j])
-			}
-			<-done3
-			<-done4			  			
+			}	  			
 	}		
 	elapsed := time.Since(start)
     	fmt.Println("HaGashash took %s", elapsed)
