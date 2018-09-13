@@ -1,6 +1,8 @@
 # HaGashash
 *A concurrent vulnerability scanner based on Nmap.*
 
+![alt text](https://i.imgflip.com/139g0q.jpg)
+
 **Installation:**
 * go get https://github.com/Gandosha/HaGashash
 * go get https://github.com/fatih/color
