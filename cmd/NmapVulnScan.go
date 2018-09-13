@@ -17,13 +17,9 @@ import (
 func NmapTCPScan(targetIP string, xmlPath string, workgroup *sync.WaitGroup) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for TCP ports.\n\n")
 	var tarsTCPorts []string
-	nmapCmd := exec.Command("bash", "-c", "sudo nmap -sS -p- -T4 -Pn -vv -oX " + xmlPath + "/TCPxml " + targetIP)
-    	err := nmapCmd.Start()
+	nmapCmd := exec.Command("bash", "-c", "nmap -sS -p- -T4 -Pn -vv -oX " + xmlPath + "/TCPxml " + targetIP)
+    	err := nmapCmd.Run()
     	if err != nil {
-        	panic(err)
-    	}
-	err = nmapCmd.Wait()	
-	if err != nil {
         	panic(err)
     	}
 	//Open up the xml and extract TCP ports from it
@@ -37,32 +33,28 @@ func NmapTCPScan(targetIP string, xmlPath string, workgroup *sync.WaitGroup) {
 	xml := string(bytes)
 	tarsTCPorts = PortExtractor(xml, tarsTCPorts)
 	ports := strings.Join(tarsTCPorts, ",")
-	//Scan extracted ports for vulns
-	color.Green("\n\n[!] Starting to scan " + targetIP + " for TCP ports vulnerabilities.\n\n")
-	nmapCmd = exec.Command("bash", "-c", "sudo nmap -Pn -sV -A -pT:" + ports + " -script vuln -vv " + targetIP + " -oN " + xmlPath + "/TCP_Vulns")
-    	err1 := nmapCmd.Start()
-    	if err1 != nil {
-		panic(err1)		
-    	}
-	err2 := nmapCmd.Wait()	
-	if err2 != nil {
-	panic(err2)
-    	}
-	color.Cyan("\n\n[!] Nmap TCP vulnerability scanning for " + targetIP + " is completed successfully.\n\n")
-	workgroup.Done()
+	switch {
+		case len(ports) > 0:
+			//Scan extracted ports for vulns
+			color.Green("\n\n[!] Starting to scan " + targetIP + " for TCP ports vulnerabilities.\n\n")
+			nmapVulnCmd := exec.Command("bash", "-c", "nmap -Pn -sV -A -pT:" + ports + " -script vuln -vv " + targetIP + " -oN " + xmlPath + "/TCP_Vulns")
+		    	err = nmapVulnCmd.Run()
+		    	if err != nil {
+				panic(err)		
+		    	}
+			color.Cyan("\n\n[!] Nmap TCP vulnerability scanning for " + targetIP + " is completed successfully.\n\n")
+		case len(ports) == 0:
+			workgroup.Done()
+	}
 }
 
 /* This function performs a nmap UDP vulnerability scan on target IP. */
 func NmapUDPScan(targetIP string, xmlPath string, workgroup *sync.WaitGroup) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for UDP ports.\n\n")
 	var tarsUDPorts []string
-	nmapCmd := exec.Command("bash", "-c", "sudo nmap -sU -p- -T4 -Pn -vv -oX " + xmlPath + "/UDPxml " + targetIP)
-    	err := nmapCmd.Start()
+	nmapCmd := exec.Command("bash", "-c", "nmap -sU -p- -T4 -Pn -vv -oX " + xmlPath + "/UDPxml " + targetIP)
+    	err := nmapCmd.Run()
     	if err != nil {
-        	panic(err)
-    	}
-	err = nmapCmd.Wait()	
-	if err != nil {
         	panic(err)
     	}
 	//Open up the xml and extract UDP ports from it
@@ -76,19 +68,19 @@ func NmapUDPScan(targetIP string, xmlPath string, workgroup *sync.WaitGroup) {
 	xml := string(bytes)
 	tarsUDPorts = PortExtractor(xml, tarsUDPorts)
 	ports := strings.Join(tarsUDPorts, ",")
-	//Scan extracted ports for vulns
-	color.Green("\n\n[!] Starting to scan " + targetIP + " for UDP ports vulnerabilities.\n\n")
-	nmapCmd = exec.Command("bash", "-c", "sudo nmap -Pn -sV -A -pU:" + ports + " -script vuln -vv " + targetIP + " -oN " + xmlPath + "/UDP_Vulns")
-    	err1 := nmapCmd.Start()
-    	if err1 != nil {
-		panic(err1)		
-    	}
-	err2 := nmapCmd.Wait()	
-	if err2 != nil {
-	panic(err2)
-    	}
-	color.Cyan("\n\n[!] Nmap UDP vulnerability scanning for " + targetIP + " is completed successfully.\n\n")
-	workgroup.Done()		
+	switch {
+		case len(ports) > 0:
+			//Scan extracted ports for vulns
+			color.Green("\n\n[!] Starting to scan " + targetIP + " for UDP ports vulnerabilities.\n\n")
+			nmapVulnCmd := exec.Command("bash", "-c", "nmap -Pn -sV -A -pU:" + ports + " -script vuln -vv " + targetIP + " -oN " + xmlPath + "/UDP_Vulns")
+		    	err = nmapVulnCmd.Run()
+		    	if err != nil {
+				panic(err)		
+		    	}
+			color.Cyan("\n\n[!] Nmap UDP vulnerability scanning for " + targetIP + " is completed successfully.\n\n")
+		case len(ports) == 0:
+			workgroup.Done()
+	}		
 }
 
 

@@ -49,7 +49,7 @@ func AliveHostsInSubnet(ipAddressesSlice []string, myIpAddress string) []string 
     	fmt.Println(" ")
 	nmapOutput := string(nmapOut)
 	targets := ExtractIPs(ipAddressesSlice, nmapOutput)
-	color.Cyan("[+] Alive hosts in " + subnetToScan + "/24 are:\n")
+	color.Cyan("[+] Alive hosts in " + subnetToScan + "/24 are:\n\n")
 	for k := range targets {
 		fmt.Println(targets[k])
    	}

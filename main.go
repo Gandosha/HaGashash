@@ -22,7 +22,7 @@ func main() {
 	hostPtr := flag.String("host", "nil", "Scan only this host (Type its IP address or domain name).")
 	hostsPtr := flag.String("hosts", "nil", "Scan only ip addresses that are mentioned in the list (Ex. /root/temp/targets. Path for host list to scan in Line-By-Line form).")
 	subnetPtr := flag.Bool("subnet", false, "Discover alive hosts in your current subnet and scan them.")
-	subnetsPtr := flag.Bool("subnets", false, "Discover alive hosts all subnets and scan them.")
+	subnetsPtr := flag.Bool("subnets", false, "Discover alive hosts in all subnets and scan them.")
 	flag.Parse()
 	switch {
 		case *interfacePtr == "nil":
@@ -76,11 +76,11 @@ func main() {
 			}	
 		case *interfacePtr != "nil" && *hostPtr != "nil" && *projectNamePtr != "nil" && *subnetPtr == false && *subnetsPtr == false && *hostsPtr == "nil":
 			color.Green("\n\n[!] Starting to perform a single host scan.\n\n")			
-			path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(*hostsPtr,"'$'\n'")
+			path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(*hostPtr,"'$'\n'")
 			cmd.CreateDirIfNotExist(path)	//Create directory for the target
 			wg.Add(2)
-			go cmd.NmapTCPScan(strings.Trim(*hostsPtr,"'$'\n'"),path,&wg)	//TCP scan
-			go cmd.NmapUDPScan(strings.Trim(*hostsPtr,"'$'\n'"),path,&wg)	//UDP scan
+			go cmd.NmapTCPScan(strings.Trim(*hostPtr,"'$'\n'"),path,&wg)	//TCP scan
+			go cmd.NmapUDPScan(strings.Trim(*hostPtr,"'$'\n'"),path,&wg)	//UDP scan
 			wg.Wait()
 			cmd.SummaryMaker(path,*hostPtr) 
 		case *interfacePtr != "nil" && *hostPtr == "nil" && *projectNamePtr != "nil" && *subnetPtr == false && *subnetsPtr == false && *hostsPtr != "nil":
