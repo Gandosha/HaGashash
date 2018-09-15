@@ -44,6 +44,7 @@ func NmapTCPScan(targetIP string, xmlPath string, workgroup *sync.WaitGroup) {
 		    	}
 			color.Cyan("\n\n[!] Nmap TCP vulnerability scanning for " + targetIP + " is completed successfully.\n\n")
 		case len(ports) == 0:
+			color.Yellow("\n\n[!] There is no TCP ports available in " + targetIP + ".\n\n")
 			workgroup.Done()
 	}
 }
@@ -79,6 +80,7 @@ func NmapUDPScan(targetIP string, xmlPath string, workgroup *sync.WaitGroup) {
 		    	}
 			color.Cyan("\n\n[!] Nmap UDP vulnerability scanning for " + targetIP + " is completed successfully.\n\n")
 		case len(ports) == 0:
+			color.Yellow("\n\n[!] There is no UDP ports available in " + targetIP + ".\n\n")
 			workgroup.Done()
 	}		
 }

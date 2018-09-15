@@ -41,13 +41,4 @@ func SummaryMaker(projectDirPath string,targetIP string) {
 	check(err)
 	sumFile.Sync()
 	color.Yellow("\n\n[!] Summary file for " + targetIP + " is ready.\n\n")
-	//Delete unnecessary files
-	err = os.Remove(projectDirPath + "/TCP_Vulns")
-	check(err)
-	err = os.Remove(projectDirPath + "/UDP_Vulns")
-	check(err)
-	err = os.Remove(projectDirPath + "/TCPxml")
-	check(err)
-	err = os.Remove(projectDirPath + "/UDPxml")
-	check(err)
 }
