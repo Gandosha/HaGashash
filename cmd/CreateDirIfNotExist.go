@@ -17,7 +17,7 @@ func CreateDirIfNotExist(dir string) {
 	if err != nil {
         	panic(err)
     	}
-	color.Cyan("\n[!] Directory created at: " + dir + ".")
+	color.White("\n[+] Directory created at: " + dir + ".")
 
 
 

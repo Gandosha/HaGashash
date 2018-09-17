@@ -12,7 +12,7 @@ func CheckIfNecessaryToolsAreExist(command string) {
     if err != nil {
         color.Red("\n[!] didn't find " + command + " executable! Please install it and then run HaGashash again.\n")
     } else {
-        color.Cyan(command + " executable is in '%s'\n", path)
+        color.Cyan("[+] " + command + " executable is in '%s'\n", path)
     }
 }
 
@@ -22,5 +22,5 @@ func Init() {
 	for i := range tools {
 		CheckIfNecessaryToolsAreExist(tools[i])
 	}
-	color.Green("[!] Dependencies check is completed successfully.")
+	color.White("[!] Dependencies check is completed successfully.")
 }

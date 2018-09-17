@@ -40,5 +40,5 @@ func SummaryMaker(projectDirPath string,targetIP string) {
 	_, err = sumFile.Write([]byte(udpVulnFileBytes))
 	check(err)
 	sumFile.Sync()
-	color.Yellow("\n\n[!] Summary file for " + targetIP + " is ready.\n\n")
+	color.White("\n\n[+] Summary file for " + targetIP + " is ready.\n\n")
 }
