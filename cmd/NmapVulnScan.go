@@ -12,7 +12,7 @@ import (
 /* This function performs a nmap TCP script scan on target IP. */
 func NmapTCPScan(targetIP string, xmlPath string, workgroup *sync.WaitGroup) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for TCP interesting stuff.\n\n")
-	nmapCmd := exec.Command("bash", "-c", "nmap -sS -p- -A -T4 -Pn -vv -oX " + xmlPath + "/TCPxml " + targetIP)
+	nmapCmd := exec.Command("bash", "-c", "nmap -sS -p- -A -T4 -Pn -vv -oX " + xmlPath + "/Nmap_TCP_scan_output " + targetIP)
     	err := nmapCmd.Run()
     	if err != nil {
         	panic(err)
@@ -24,7 +24,7 @@ func NmapTCPScan(targetIP string, xmlPath string, workgroup *sync.WaitGroup) {
 /* This function performs a nmap UDP script scan on target IP. */
 func NmapUDPScan(targetIP string, xmlPath string, workgroup *sync.WaitGroup) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for UDP interesting stuff.\n\n")
-	nmapCmd := exec.Command("bash", "-c", "nmap -sU -p- -A -T4 -Pn -vv -oX " + xmlPath + "/UDPxml " + targetIP)
+	nmapCmd := exec.Command("bash", "-c", "nmap -sU -p- -A -T4 -Pn -vv -oX " + xmlPath + "/Nmap_UDP_scan_output " + targetIP)
     	err := nmapCmd.Run()
     	if err != nil {
         	panic(err)
