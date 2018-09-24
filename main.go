@@ -7,7 +7,7 @@ import (
 	"flag"
 	"sync"
 	"strings"
-	"HaGashash/cmd"
+	"github.com/Gandosha/HaGashash/cmd"
 	"github.com/fatih/color"
 )
 
