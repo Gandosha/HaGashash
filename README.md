@@ -4,8 +4,8 @@
 ![alt text](https://i.imgflip.com/139g0q.jpg)
 
 **Installation:**
-* go get https://github.com/Gandosha/HaGashash
-* go get https://github.com/fatih/color
+* go get github.com/Gandosha/HaGashash
+* go get github.com/fatih/color
 
 **Usage:**
 * Run with root.
