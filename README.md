@@ -1,5 +1,5 @@
 # HaGashash
-*A concurrent vulnerability scanner based on Nmap.*
+*A concurrent script scanner based on Nmap.*
 
 ![alt text](https://i.imgflip.com/139g0q.jpg)
 
