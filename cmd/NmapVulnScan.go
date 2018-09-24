@@ -9,7 +9,7 @@ import (
 )
 
 
-/* This function performs a nmap TCP vulnerability scan on target IP. */
+/* This function performs a nmap TCP script scan on target IP. */
 func NmapTCPScan(targetIP string, xmlPath string, workgroup *sync.WaitGroup) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for TCP interesting stuff.\n\n")
 	nmapCmd := exec.Command("bash", "-c", "nmap -sS -p- -A -T4 -Pn -vv -oX " + xmlPath + "/TCPxml " + targetIP)
@@ -17,11 +17,11 @@ func NmapTCPScan(targetIP string, xmlPath string, workgroup *sync.WaitGroup) {
     	if err != nil {
         	panic(err)
     	}
-	color.White("\n\n[+] Nmap's TCP vulnerability scanning on " + targetIP + " is completed successfully.\n\n")
+	color.White("\n\n[+] Nmap's TCP script scanning on " + targetIP + " is completed successfully.\n\n")
 	workgroup.Done()
 }
 
-/* This function performs a nmap UDP vulnerability scan on target IP. */
+/* This function performs a nmap UDP script scan on target IP. */
 func NmapUDPScan(targetIP string, xmlPath string, workgroup *sync.WaitGroup) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for UDP interesting stuff.\n\n")
 	nmapCmd := exec.Command("bash", "-c", "nmap -sU -p- -A -T4 -Pn -vv -oX " + xmlPath + "/UDPxml " + targetIP)
@@ -29,7 +29,7 @@ func NmapUDPScan(targetIP string, xmlPath string, workgroup *sync.WaitGroup) {
     	if err != nil {
         	panic(err)
     	}
-	color.White("\n\n[+] Nmap's UDP vulnerability scanning on " + targetIP + " is completed successfully.\n\n")
+	color.White("\n\n[+] Nmap's UDP script scanning on " + targetIP + " is completed successfully.\n\n")
 	workgroup.Done()
 }	
 
