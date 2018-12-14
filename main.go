@@ -49,8 +49,8 @@ func main() {
 				path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
 				cmd.CreateDirIfNotExist(path)	//Create directory for the target
 				wg.Add(2)
-				go cmd.NmapTCPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//TCP scan
-				go cmd.NmapUDPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//UDP scan	
+				go cmd.TCPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//TCP scan
+				go cmd.UDPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//UDP scan	
 			}
 			wg.Wait()
 			for j:= range tars {
@@ -66,8 +66,8 @@ func main() {
 				path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
 				cmd.CreateDirIfNotExist(path)	//Create directory for the target
 				wg.Add(2)
-				go cmd.NmapTCPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//TCP scan
-				go cmd.NmapUDPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//UDP scan	
+				go cmd.TCPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//TCP scan
+				go cmd.UDPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//UDP scan	
 			}
 			wg.Wait()
 			for j:= range tars {
@@ -79,8 +79,8 @@ func main() {
 			path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(*hostPtr,"'$'\n'")
 			cmd.CreateDirIfNotExist(path)	//Create directory for the target
 			wg.Add(2)
-			go cmd.NmapTCPScan(strings.Trim(*hostPtr,"'$'\n'"),path,&wg)	//TCP scan
-			go cmd.NmapUDPScan(strings.Trim(*hostPtr,"'$'\n'"),path,&wg)	//UDP scan
+			go cmd.TCPScan(strings.Trim(*hostPtr,"'$'\n'"),path,&wg)	//TCP scan
+			go cmd.UDPScan(strings.Trim(*hostPtr,"'$'\n'"),path,&wg)	//UDP scan
 			wg.Wait()
 			cmd.SummaryMaker(path,*hostPtr) 
 		case *interfacePtr != "nil" && *hostPtr == "nil" && *projectNamePtr != "nil" && *subnetPtr == false && *subnetsPtr == false && *hostsPtr != "nil":
@@ -90,8 +90,8 @@ func main() {
 				path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[i],"'$'\n'")
 				cmd.CreateDirIfNotExist(path)	//Create directory for the target
 				wg.Add(2)
-				go cmd.NmapTCPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//TCP scan
-				go cmd.NmapUDPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//UDP scan	
+				go cmd.TCPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//TCP scan
+				go cmd.UDPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//UDP scan	
 			}
 			wg.Wait()
 			for j:= range tars {
