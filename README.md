@@ -1,5 +1,5 @@
 # HaGashash
-*A concurrent script scanner based on Nmap.*
+*A concurrent script scanner.*
 
 ![alt text](https://i.imgflip.com/139g0q.jpg)
 
