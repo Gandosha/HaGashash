@@ -12,7 +12,7 @@ import (
 /* This function performs a nmap TCP script scan on target IP. */
 func TCPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for TCP interesting stuff.\n\n")
-	nmapCmd := exec.Command("bash", "-c", "nmap -sS -p- -A -T4 -Pn -vv -oN " + outputPath + "/nmap_tcp_scan_output -oG /tmp/nmap_tcp_scan_output_grepable " + targetIP)
+	nmapCmd := exec.Command("bash", "-c", "nmap -p- -A -T4 -Pn -vv -oN " + outputPath + "/nmap_tcp_scan_output -oG /tmp/nmap_tcp_scan_output_grepable " + targetIP)
     	err := nmapCmd.Run()
     	if err != nil {
         	panic(err)
