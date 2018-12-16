@@ -17,7 +17,7 @@ func main() {
 	fmt.Println("\n\n\n<-=|HaGashash by Gandosha|=->\n")
 	cmd.Init()	
 	userEnvVar := os.Getenv("SUDO_USER")
-	projectNamePtr := flag.String("project", "nil", "Name of the project. (Required! It will create project's folder in /home/" + userEnvVar + "/HaGashash_Temp/).")
+	projectNamePtr := flag.String("project", "nil", "Name of the project. (Required! It will create project's folder in /home" + userEnvVar + "/HaGashash_Projects/).")
 	interfacePtr := flag.String("interface", "nil", "Name of the interface to use (Required! Run ifconfig before HaGashash in order to choose one).")
 	hostPtr := flag.String("host", "nil", "Scan only this host (Type its IP address or domain name).")
 	hostsPtr := flag.String("hosts", "nil", "Scan only ip addresses that are mentioned in the list (Ex. /root/temp/targets. Path for host list to scan in Line-By-Line form).")

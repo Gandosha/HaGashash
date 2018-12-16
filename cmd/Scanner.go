@@ -12,14 +12,14 @@ import (
 /* This function performs a nmap TCP script scan on target IP. */
 func TCPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for TCP interesting stuff.\n\n")
-	nmapCmd := exec.Command("bash", "-c", "nmap -sS -p- -A -T4 -Pn -vv -oG " + outputPath + "/nmap_tcp_scan_output " + targetIP)
+	nmapCmd := exec.Command("bash", "-c", "nmap -sS -p- -A -T4 -Pn -vv -oN " + outputPath + "/nmap_tcp_scan_output -oG /tmp/nmap_tcp_scan_output_grepable " + targetIP)
     	err := nmapCmd.Run()
     	if err != nil {
         	panic(err)
     	}
 	color.White("\n\n[+] Nmap's TCP script scanning on " + targetIP + " is completed successfully.\n\n")
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for web application vulnerabilities.\n\n")
-	niktoCmd := exec.Command("bash", "-c", "nikto -h " + outputPath + "/nmap_tcp_scan_output -o " + outputPath + "/nikto_scan_out.txt")
+	niktoCmd := exec.Command("bash", "-c", "nikto -h /tmp/nmap_tcp_scan_output -o " + outputPath + "/nikto_scan_out.txt")
     	err = niktoCmd.Run()
     	if err != nil {
         	panic(err)
@@ -31,7 +31,7 @@ func TCPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 /* This function performs a nmap UDP script scan on target IP. */
 func UDPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for UDP interesting stuff.\n\n")
-	nmapCmd := exec.Command("bash", "-c", "nmap -sU -p- -A -T4 -Pn -vv -oG " + outputPath + "/nmap_udp_scan_output " + targetIP)
+	nmapCmd := exec.Command("bash", "-c", "nmap -sU -p- -A -T4 -Pn -vv -oN " + outputPath + "/nmap_udp_scan_output " + targetIP)
     	err := nmapCmd.Run()
     	if err != nil {
         	panic(err)
