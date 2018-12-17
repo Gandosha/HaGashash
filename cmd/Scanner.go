@@ -9,7 +9,7 @@ import (
 )
 
 
-/* This function performs a nmap TCP script scan on target IP. */
+/* This function performs a TCP script scan on target IP. */
 func TCPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for TCP interesting stuff.\n\n")
 	nmapCmd := exec.Command("bash", "-c", "nmap -p- -A -T4 -Pn -vv -oG " + outputPath + "/nmap_tcp_scan_output_grepable > " + outputPath + "/nmap_tcp_scan_output " + targetIP)
@@ -28,7 +28,7 @@ func TCPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 	workgroup.Done()
 }
 
-/* This function performs a nmap UDP script scan on target IP. */
+/* This function performs a UDP script scan on target IP. */
 func UDPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for UDP interesting stuff.\n\n")
 	nmapCmd := exec.Command("bash", "-c", "nmap -sU -p- -A -T4 -Pn -vv > " + outputPath + "/nmap_udp_scan_output " + targetIP)
