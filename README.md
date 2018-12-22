@@ -29,7 +29,11 @@
 * **(Scan hosts that are on your current subnet)** go run main.go -subnet=true -interface=enp0s3 -project=example3
 * **(Scan hosts in all subnets)** go run main.go -subnets=true -interface=enp0s3 -project=example3
 
-The tool creates a summary file inside target's directory (Ex. /home/HaGashash_Projects/example_project/192.168.0.1/Summary). 
+The tool creates 4 output files in target's directory. You can use it for further enumeration / exploitation:
+* nmap_tcp_scan_output
+* nmap_tcp_scan_output_grepable
+* nikto_scan_out.txt
+* nmap_udp_scan_output
 
 **My implementation sucks? Feel free to:**
 * Not use it.
