@@ -13,7 +13,11 @@ import (
 
 func main() {
 	start := time.Now()
-	var wg sync.WaitGroup
+	var (
+		wg sync.WaitGroup	//Concurrency
+		//sliceOfPorts []string	//slice of ports per service
+		//service2scan string
+	)
 	fmt.Println("\n\n\n<-=|HaGashash by Gandosha|=->\n")
 	cmd.Init()	
 	userEnvVar := os.Getenv("SUDO_USER")
@@ -52,11 +56,7 @@ func main() {
 				go cmd.TCPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//TCP scan
 				go cmd.UDPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//UDP scan	
 			}
-			wg.Wait()
-			for j:= range tars {
-				path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[j],"'$'\n'")
-				cmd.SummaryMaker(path,tars[j])
-			}	
+			wg.Wait()	
 		case *interfacePtr != "nil" && *hostPtr == "nil" && *projectNamePtr != "nil" && *subnetPtr == true && *subnetsPtr == false && *hostsPtr == "nil":
 			color.Green("\n\n[!] Starting to scan your subnet.\n\n")
 			var targets []string
@@ -69,11 +69,7 @@ func main() {
 				go cmd.TCPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//TCP scan
 				go cmd.UDPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//UDP scan	
 			}
-			wg.Wait()
-			for j:= range tars {
-				path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[j],"'$'\n'")
-				cmd.SummaryMaker(path,tars[j])
-			}	
+			wg.Wait()	
 		case *interfacePtr != "nil" && *hostPtr != "nil" && *projectNamePtr != "nil" && *subnetPtr == false && *subnetsPtr == false && *hostsPtr == "nil":
 			color.Green("\n\n[!] Starting to perform a single host scan.\n\n")			
 			path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(*hostPtr,"'$'\n'")
@@ -81,8 +77,7 @@ func main() {
 			wg.Add(2)
 			go cmd.TCPScan(strings.Trim(*hostPtr,"'$'\n'"),path,&wg)	//TCP scan
 			go cmd.UDPScan(strings.Trim(*hostPtr,"'$'\n'"),path,&wg)	//UDP scan
-			wg.Wait()
-			cmd.SummaryMaker(path,*hostPtr) 
+			wg.Wait() 
 		case *interfacePtr != "nil" && *hostPtr == "nil" && *projectNamePtr != "nil" && *subnetPtr == false && *subnetsPtr == false && *hostsPtr != "nil":
 			color.Green("\n\n[!] Starting to scan targets that are mentioned in " + *hostsPtr + ".\n\n")
 			tars := cmd.ReadLine(*hostsPtr)
@@ -93,11 +88,7 @@ func main() {
 				go cmd.TCPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//TCP scan
 				go cmd.UDPScan(strings.Trim(tars[i],"'$'\n'"),path,&wg)	//UDP scan	
 			}
-			wg.Wait()
-			for j:= range tars {
-				path := "/home/" + userEnvVar + "HaGashash_Projects/" + *projectNamePtr + "/" + strings.Trim(tars[j],"'$'\n'")
-				cmd.SummaryMaker(path,tars[j])
-			}	  			
+			wg.Wait()	  			
 	}		
 	elapsed := time.Since(start)
     	fmt.Println("HaGashash execution time:", elapsed)
