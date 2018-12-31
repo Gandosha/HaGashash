@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"strings"
 	"os/exec"
+	"bufio"
 	"github.com/fatih/color"
 )
 
@@ -64,17 +65,30 @@ func Init() {
 	color.White("[!] Dependencies check is completed successfully.")
 }
 
+/* This function reads the content of a file and returns a slice of hosts that are mentioned there (the addresses inside the file should be Line-By-Line). */
+func ReadLine(pathPtr string) []string {
+	var sliceOfHosts []string
+  	inFile, _ := os.Open(pathPtr)
+  	defer inFile.Close()
+  	scanner := bufio.NewScanner(inFile)
+	scanner.Split(bufio.ScanLines)
+  	for scanner.Scan() {
+		sliceOfHosts = append(sliceOfHosts, scanner.Text())
+  	}
+	return sliceOfHosts
+}
+
 //This function opens a file for reading
-func OpenFile2Read(outputPath string) string {
-	file, err := os.Open(outputPath + "/nmap_tcp_scan_output_grepable")
+func OpenFile2Read(filePath string) string {
+	file, err := os.Open(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}
-	grepable, err := ioutil.ReadAll(file)
+	read, err := ioutil.ReadAll(file)
     	if err != nil {
         	log.Fatal(err)
     	}
-	return string(grepable)
+	return string(read)
 }
 
 /*This function takes a nmap_tcp_scan_output_grepable file with a service name.

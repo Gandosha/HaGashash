@@ -15,8 +15,6 @@ func main() {
 	start := time.Now()
 	var (
 		wg sync.WaitGroup	//Concurrency
-		//sliceOfPorts []string	//slice of ports per service
-		//service2scan string
 	)
 	fmt.Println("\n\n\n<-=|HaGashash by Gandosha|=->\n")
 	cmd.Init()	
