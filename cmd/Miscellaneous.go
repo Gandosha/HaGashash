@@ -3,7 +3,6 @@ package cmd
 import (
 	"os"
 	"log"
-	"fmt"
 	"io/ioutil"
 	"strings"
 	"os/exec"
@@ -111,8 +110,8 @@ func PortExtractor(data string, serviceName string) (bool, string, string, int) 
 	if ( portsWordIndex != -1 ) {
 		data = data[portsWordIndex+6:]
 	}
-	fmt.Println("\n\nLength:\n",len(data))
-	fmt.Println("\n\ndata_1\n",data)
+	//fmt.Println("\n\nLength:\n",len(data))
+	//fmt.Println("\n\ndata_1\n",data)
 	//Space,comma and backSlash mapper
 	for s1, v1 := range data {
 		switch {
@@ -124,9 +123,9 @@ func PortExtractor(data string, serviceName string) (bool, string, string, int) 
 				commaIndexes = append(commaIndexes,s1)
 		}	
 	}
-	fmt.Println("\n\nspaceIndexes\n",spaceIndexes)
-	fmt.Println("\n\nbackSlashIndexes\n",backSlashIndexes)
-	fmt.Println("\n\ncommaIndexes\n",commaIndexes)
+	//fmt.Println("\n\nspaceIndexes\n",spaceIndexes)
+	//fmt.Println("\n\nbackSlashIndexes\n",backSlashIndexes)
+	//fmt.Println("\n\ncommaIndexes\n",commaIndexes)
 	serviceNameIndex = strings.Index(data, serviceName)	//Find service's name index
 	//spaceIndex extractor
 	for s2, v2 := range spaceIndexes {
@@ -149,17 +148,17 @@ func PortExtractor(data string, serviceName string) (bool, string, string, int) 
 			break
 		}	
 	}
-	fmt.Println("\n\nserviceNameIndex\n",serviceNameIndex)
+	/*fmt.Println("\n\nserviceNameIndex\n",serviceNameIndex)
 	fmt.Println("\n\nspaceIndex\n",spaceIndex)
 	fmt.Println("\n\nbackSlashIndex\n",backSlashIndex)
-	fmt.Println("\n\ncommaIndex\n",commaIndex)
+	fmt.Println("\n\ncommaIndex\n",commaIndex)*/
 	portNumber := data[spaceIndex+1:backSlashIndex]
-	fmt.Println("\n\nportNumber extracted:\n",portNumber)
+	//fmt.Println("\n\nportNumber extracted:\n",portNumber)
 	data = data[commaIndex:]
 	//data = data[spaceIndex+1:]
 	serviceNameIndex = strings.Index(data, serviceName)	//Find service's name index
-	fmt.Println("\n\nLength:\n",len(data))
-	fmt.Println("\n\ndata_after_cut:\n",data)	
+	/*fmt.Println("\n\nLength:\n",len(data))
+	fmt.Println("\n\ndata_after_cut:\n",data)*/	
 	if ( serviceNameIndex == -1 || len(commaIndexes) == 1) {
 		return false, portNumber, "nil", 0	//No more serviceName entries
 	}	
