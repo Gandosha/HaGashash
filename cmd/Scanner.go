@@ -120,10 +120,10 @@ func TCPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 	grepable := OpenFile2Read(outputPath + "/nmap_tcp_scan_output_grepable")
 	serviceNameIndex = strings.Index(grepable, service2export)	//Find service's name index
 	if ( serviceNameIndex != -1 ) {
-		answer, portnum, dat := PortExtractor(grepable, service2export)
+		answer, portnum, dat, commaIndex := PortExtractor(grepable, service2export)
 		sliceOfPorts = append(sliceOfPorts,portnum)
-		for answer {
-			answer, portnum, dat = PortExtractor(dat,service2export)
+		for ( answer && commaIndex != 0 ) {
+			answer, portnum, dat, commaIndex = PortExtractor(dat,service2export)
 			sliceOfPorts = append(sliceOfPorts,portnum)
 		}
 		fmt.Printf("\n\nsliceOfPorts:\n",sliceOfPorts)
@@ -158,15 +158,13 @@ func UDPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 /* This function performs a web application vulnerability scan against a target (protocol://IP:port). */
 func WebScan(protocol string,targetIP string, outputPath string, port2scan string) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + ":" + port2scan + " for web application vulnerabilities.\n\n")
-	//Initiate cewl on targetIP:port2scan
-	//cewl -d 5 -m 1 -w cewl_out --with-numbers -a --meta_file cewl_metadata_out -e --email_file cewl_emails_out 192.168.1.66:8888
-	cewlCmd := exec.Command("bash", "-c", "cewl -d 5 -m 1 -w " + outputPath + "/cewl_out_" + port2scan + " --with-numbers -a --meta_file " + outputPath + "/cewl_metadata_out_" + port2scan + " -e --email_file " + outputPath + "/cewl_emails_out_" + port2scan + " " + protocol + "://" + targetIP + ":" + port2scan + " && cat " + outputPath + "/cewl_* > " + outputPath + "/gobuster_wordlist_" + port2scan + " && cat /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt >> " + outputPath + "/gobuster_wordlist_" + port2scan)
+	//Initiate cewl
+	cewlCmd := exec.Command("bash", "-c", "cewl -m 1 -w " + outputPath + "/cewl_out_" + port2scan + " --with-numbers -a --meta_file " + outputPath + "/cewl_metadata_out_" + port2scan + " -e --email_file " + outputPath + "/cewl_emails_out_" + port2scan + " " + protocol + "://" + targetIP + ":" + port2scan + " && cat " + outputPath + "/cewl_* > " + outputPath + "/gobuster_wordlist_" + port2scan + " && cat /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt >> " + outputPath + "/gobuster_wordlist_" + port2scan)
     	err := cewlCmd.Run()
     	if err != nil {
         	panic(err)
     	}
-	//Initiate gobuster on targetIP:port2scan
-	//gobuster -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -o /tmp/gobuster_out -u 192.168.1.66:8888 -f -r -k -n
+	//Initiate gobuster using cewl's output and /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
 	gobusterCmd := exec.Command("bash", "-c", "gobuster -w " + outputPath + "/gobuster_wordlist_" + port2scan + " -o " + outputPath + "/gobuster_out_" + port2scan + " -u " + protocol + "://" + targetIP + ":" + port2scan + " -f -r -k -n")
     	err = gobusterCmd.Run()
     	if err != nil {
@@ -174,12 +172,10 @@ func WebScan(protocol string,targetIP string, outputPath string, port2scan strin
     	}
 	//open the file to read
 	dirsFilePath := outputPath + "/gobuster_wordlist_" + port2scan
-	//dirsFile := OpenFile2Read(dirs)
 	dirsFile, _ := os.Open(dirsFilePath)
 	defer dirsFile.Close()
 	scanner := bufio.NewScanner(dirsFile)
 	//Initiate nikto with gobuster's output (Line_by_Line)
-	//nikto -h http://192.168.43.4:80/railsgoat
 	for scanner.Scan() {
 		niktoCmd := exec.Command("bash", "-c", "nikto -h " + protocol + "://" + targetIP + ":" + port2scan + "/" + scanner.Text() + " -Tuning x12567> " + outputPath + "/nikto_scan_out_" + port2scan)
 	    	err = niktoCmd.Run()

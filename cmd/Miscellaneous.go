@@ -93,7 +93,7 @@ func OpenFile2Read(filePath string) string {
 
 /*This function takes a nmap_tcp_scan_output_grepable file with a service name.
 The function returns a port number of the service name that was specified.*/
-func PortExtractor(data string, serviceName string) (bool, string, string) {
+func PortExtractor(data string, serviceName string) (bool, string, string, int) {
 	var (		
 		portsWord = "Ports:"
 		space = " "
@@ -156,14 +156,16 @@ func PortExtractor(data string, serviceName string) (bool, string, string) {
 	portNumber := data[spaceIndex+1:backSlashIndex]
 	fmt.Println("\n\nportNumber extracted:\n",portNumber)
 	data = data[commaIndex:]
+	//data = data[spaceIndex+1:]
 	serviceNameIndex = strings.Index(data, serviceName)	//Find service's name index
 	fmt.Println("\n\nLength:\n",len(data))
 	fmt.Println("\n\ndata_after_cut:\n",data)	
 	if ( serviceNameIndex == -1 || len(commaIndexes) == 1) {
-		return false, portNumber, "nil"	//No more serviceName entries
+		return false, portNumber, "nil", 0	//No more serviceName entries
 	}	
 	if ( len(data) > 0 && serviceNameIndex != -1 ) {
-		return true, portNumber, data	//There are more entries for that serviceName
+		return true, portNumber, data, commaIndex	//There are more entries for that serviceName
 	}	
-	return false,"nil","nil"
+	return false,"nil","nil",0
 }
+
