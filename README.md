@@ -1,6 +1,10 @@
 # HaGashash
 *A concurrent basic script scanner.*
 
+Tested on 
+- Kali linux x64 2018.4
+- go version go1.10.5 linux/amd64
+
 ![alt text](https://i.imgflip.com/139g0q.jpg)
 
 **Installation:**
