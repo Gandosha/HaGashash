@@ -83,10 +83,20 @@ func AliveHostsInAllSubnets(ipAddressesSlice []string, myIpAddress string) []str
 		fmt.Println(targets[k])
    	}
 	return targets
+}
+
+/* This function perfoms a HTTP check against the target.
+The function gets an IP address and a port number. It returns true if the target is reachable via HTTP or false if not.*/
+func HttpCheck(targetIP string, port2scan string) bool {
+	_, err := http.Get("http://" + targetIP + ":" + port2scan + "/")
+	if err != nil {
+		return false
+	}
+	return true
 } 
 
 /* This function perfoms a HTTPS check against the target.
-The function gets an IP address and a port number. It returns true if the target supports HTTPS or false if not (security check is disabled).*/
+The function gets an IP address and a port number. It returns true if the target is reachable via HTTPS or false if not (security check is disabled).*/
 func HttpsCheck(targetIP string, port2scan string) bool {
 	tr := &http.Transport{
 	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -106,7 +116,8 @@ func TCPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 		sliceOfPorts []string	//slice of ports per service
 		service2export string
 		serviceNameIndex int
-		httpORs bool	//HttpsCheck function returned value
+		isHTTP bool	//HttpCheck function returned value
+		isHTTPS bool	//HttpsCheck function returned value
 	)
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for TCP interesting stuff.\n\n")
 	nmapCmd := exec.Command("bash", "-c", "nmap -p- -A -T4 -Pn -vv -oG " + outputPath + "/nmap_tcp_scan_output_grepable > " + outputPath + "/nmap_tcp_scan_output " + targetIP)
@@ -126,15 +137,16 @@ func TCPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 			answer, portnum, dat, commaIndex = PortExtractor(dat,service2export)
 			sliceOfPorts = append(sliceOfPorts,portnum)
 		}
-		fmt.Printf("\n\nsliceOfPorts:\n",sliceOfPorts)
 		//WebScan on extracted ports
 		for _, port := range sliceOfPorts {
-			httpORs = HttpsCheck(targetIP, port)
-			if httpORs == true {
+			isHTTPS = HttpsCheck(targetIP, port)
+			isHTTP = HttpCheck(targetIP, port)
+			if isHTTPS == true {
 				WebScan("https",targetIP, outputPath, port)
-			} else {
-				WebScan("http",targetIP, outputPath, port)
 			}
+			if isHTTP == true {
+				WebScan("http",targetIP, outputPath, port)
+			} 
 			
 		}
 	}
@@ -156,15 +168,17 @@ func UDPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 }
 
 /* This function performs a web application vulnerability scan against a target (protocol://IP:port). */
-func WebScan(protocol string,targetIP string, outputPath string, port2scan string) {
+func WebScan(protocol string, targetIP string, outputPath string, port2scan string) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + ":" + port2scan + " for web application vulnerabilities.\n\n")
 	//Initiate cewl
-	cewlCmd := exec.Command("bash", "-c", "cewl -m 1 -w " + outputPath + "/cewl_out_" + port2scan + " --with-numbers -a --meta_file " + outputPath + "/cewl_metadata_out_" + port2scan + " -e --email_file " + outputPath + "/cewl_emails_out_" + port2scan + " " + protocol + "://" + targetIP + ":" + port2scan + " && cat " + outputPath + "/cewl_* > " + outputPath + "/gobuster_wordlist_" + port2scan + " && cat /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt >> " + outputPath + "/gobuster_wordlist_" + port2scan)
+	fmt.Println("cewl on: ",protocol , targetIP , outputPath , port2scan)
+	cewlCmd := exec.Command("bash", "-c", "cewl -m 1 -w " + outputPath + "/cewl_out_" + port2scan + "_" + protocol + " --with-numbers -a --meta_file " + outputPath + "/cewl_metadata_out_" + port2scan + "_" + protocol + " -e --email_file " + outputPath + "/cewl_emails_out_" + port2scan + "_" + protocol + " " + protocol + "://" + targetIP + ":" + port2scan + " && cat " + outputPath + "/cewl_* >> " + outputPath + "/gobuster_wordlist_" + port2scan + " && cat /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt >> " + outputPath + "/gobuster_wordlist_" + port2scan)
     	err := cewlCmd.Run()
     	if err != nil {
         	panic(err)
     	}
 	//Initiate gobuster using cewl's output and /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+	fmt.Println("gobuster on: ",protocol , targetIP , outputPath , port2scan)
 	gobusterCmd := exec.Command("bash", "-c", "gobuster -w " + outputPath + "/gobuster_wordlist_" + port2scan + " -o " + outputPath + "/gobuster_out_" + port2scan + " -u " + protocol + "://" + targetIP + ":" + port2scan + " -f -r -k -n")
     	err = gobusterCmd.Run()
     	if err != nil {
@@ -176,6 +190,7 @@ func WebScan(protocol string,targetIP string, outputPath string, port2scan strin
 	defer dirsFile.Close()
 	scanner := bufio.NewScanner(dirsFile)
 	//Initiate nikto with gobuster's output (Line_by_Line)
+	fmt.Println("nikto on: ",protocol , targetIP , outputPath , port2scan)
 	for scanner.Scan() {
 		niktoCmd := exec.Command("bash", "-c", "nikto -h " + protocol + "://" + targetIP + ":" + port2scan + "/" + scanner.Text() + " -Tuning x12567> " + outputPath + "/nikto_scan_out_" + port2scan)
 	    	err = niktoCmd.Run()
