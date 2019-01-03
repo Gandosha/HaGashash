@@ -1,3 +1,12 @@
+
+
+
+***UNDER CONSTRUCTION***
+
+
+
+
+
 # HaGashash
 *A concurrent basic script scanner.*
 
