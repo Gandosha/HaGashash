@@ -1,12 +1,3 @@
-
-
-
-** -------> UNDER CONSTRUCTION <------- ** 
-
-
-
-
-
 # HaGashash
 *A concurrent basic script scanner.*
 
@@ -16,10 +7,16 @@
 
 ![alt text](https://i.imgflip.com/139g0q.jpg)
 
+**requirements:**
+* Golang - https://golang.org/doc/install
+* Nmap - https://nmap.org/download.html
+* CeWL - https://digi.ninja/projects/cewl.php
+* Gobuster - https://github.com/OJ/gobuster
+* Nikto - https://cirt.net/nikto2-docs/installation.html
+
 **Installation:**
 * go get github.com/Gandosha/HaGashash
 * go get github.com/fatih/color
-* Nikto - refer to https://cirt.net/nikto2-docs/installation.html
 
 **Usage:**
 * Run with root.
