@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"time"
 	"os"
 	"flag"
 	"sync"
@@ -12,7 +11,6 @@ import (
 )
 
 func main() {
-	defer cmd.TimeTrack(time.Now(), "HaGashash")
 	var (
 		wg sync.WaitGroup	//Concurrency
 	)

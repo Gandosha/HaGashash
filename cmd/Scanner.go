@@ -10,7 +10,6 @@ import (
 	"os"
 	"crypto/tls"
 	"net/http"
-	"time"
 )
 
 /* This recursive function extracts IP addresses from nmap -sn output. The function gets command's output and a slice of target IPs. 
@@ -158,7 +157,6 @@ func TCPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 
 /* This function performs a nmap UDP script scan on target IP. */
 func UDPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
-	defer TimeTrack(time.Now(), "UDPScan")
 	color.Green("\n\n[!] Starting to scan " + targetIP + " for UDP interesting stuff.\n\n")
 	nmapCmd := exec.Command("bash", "-c", "nmap -sU -p- -A -T4 -Pn -vv > " + outputPath + "/nmap_udp_scan_output " + targetIP)
     	err := nmapCmd.Run()

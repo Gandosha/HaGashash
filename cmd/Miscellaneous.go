@@ -8,7 +8,6 @@ import (
 	"os/exec"
 	"bufio"
 	"github.com/fatih/color"
-	"time"
 )
 
 /* This function extracts attacker's IP address from ifconfig command output according to the interface that is given as a flag. */
@@ -58,7 +57,7 @@ func CheckIfNecessaryToolsAreExist(command string) {
 
 /* Initiate */
 func Init() {
-	tools := []string{"nmap", "ifconfig","nikto"}
+	tools := []string{"nmap","ifconfig","nikto","cewl"}
 	for i := range tools {
 		CheckIfNecessaryToolsAreExist(tools[i])
 	}
@@ -154,11 +153,4 @@ func PortExtractor(data string, serviceName string) (bool, string, string, int) 
 		return true, portNumber, data, commaIndex	//There are more entries for that serviceName
 	}	
 	return false,"nil","nil",0
-}
-
-/* This function tracks the execution time of the given action.
-It returns the elapsed time since the action was started. */
-func TimeTrack(start time.Time, name string) {
-    elapsed := time.Since(start)
-    log.Printf("%s took %s", name, elapsed)
 }
