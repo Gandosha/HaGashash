@@ -5,7 +5,11 @@ It outputs files in target's directory, that can be useful for further enumerati
 
 **Tested on:**
 - Kali linux x64 2018.4
-- go version go1.10.5 linux/amd64
+- Golang go1.10.5 linux/amd64
+- Nmap 7.70
+- CeWL 5.4.3
+- Gobuster 2.0.1
+- Nikto 2.1.6
 
 ![alt text](https://i.imgflip.com/139g0q.jpg)
 
