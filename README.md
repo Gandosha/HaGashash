@@ -7,7 +7,7 @@
 
 ![alt text](https://i.imgflip.com/139g0q.jpg)
 
-**requirements:**
+**Requirements:**
 * Golang - https://golang.org/doc/install
 * Nmap - https://nmap.org/download.html
 * CeWL - https://digi.ninja/projects/cewl.php
