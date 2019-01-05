@@ -1,5 +1,5 @@
 # HaGashash
-*A concurrent basic script scanner.*
+*A concurrent basic script scanner that relies on Nmap, CeWL, Gobuster and Nikto.*
 
 **Tested on:**
 - Kali linux x64 2018.4
@@ -27,23 +27,19 @@
 * -interface 
 --> Name of the interface to use (Required! Run ifconfig before HaGashash in order to choose one). (default "nil")
 * -project 
---> Name of the project. (Required! It will create project's folder in /home//HaGashash_Temp/). (default "nil")
+--> Name of the project. (Required! It will create project's folder in /root/HaGashash_Projects/). (default "nil")
 * -subnet 
 --> Discover alive hosts in your current subnet and scan them.
 * -subnets 
 --> Discover alive hosts in all subnets and scan them.
 
 **Usage Examples:**
-* **(Single host scan)** go run main.go -host=192.168.1.1 -interface=enp0s3 -project=example1
-* **(Multiple hosts scan from a list)** go run main.go -hosts=/root/temp/targets -interface=enp0s3 -project=example2
-* **(Scan hosts that are on your current subnet)** go run main.go -subnet=true -interface=enp0s3 -project=example3
-* **(Scan hosts in all subnets)** go run main.go -subnets=true -interface=enp0s3 -project=example3
+* **(Single host scan)** go run /root/go/src/github.com/Gandosha/HaGashash/main.go -host=192.168.1.1 -interface=enp0s3 -project=example1
+* **(Multiple hosts scan from a list)** go run /root/go/src/github.com/Gandosha/HaGashash/main.go -hosts=/root/temp/targets -interface=enp0s3 -project=example2
+* **(Scan hosts that are on your current subnet)** go run /root/go/src/github.com/Gandosha/HaGashash/main.go -subnet=true -interface=enp0s3 -project=example3
+* **(Scan hosts in all subnets)** go run /root/go/src/github.com/Gandosha/HaGashash/main.go -subnets=true -interface=enp0s3 -project=example3
 
-The tool creates 4 output files in target's directory. You can use it for further enumeration / exploitation:
-* nmap_tcp_scan_output
-* nmap_tcp_scan_output_grepable
-* nikto_scan_out.txt
-* nmap_udp_scan_output
+The tool outputs files in target's directory that can be useful for further enumeration / exploitation.
 
 **My implementation sucks? Feel free to:**
 * Not use it.
