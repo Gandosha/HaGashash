@@ -1,7 +1,6 @@
 # HaGashash
 A concurrent basic script scanner that relies on Nmap, CeWL, Gobuster and Nikto.
-
-The tool outputs files in target's directory, that can be useful for further enumeration / exploitation.
+It outputs files in target's directory, that can be useful for further enumeration / exploitation during the OSCP exam.
 
 **Tested on:**
 - Kali linux x64 2018.4
