@@ -1,5 +1,6 @@
 # HaGashash
-*A concurrent basic script scanner that relies on Nmap, CeWL, Gobuster and Nikto.*
+A concurrent basic script scanner that relies on Nmap, CeWL, Gobuster and Nikto.
+The tool outputs files in target's directory that can be useful for further enumeration / exploitation.
 
 **Tested on:**
 - Kali linux x64 2018.4
@@ -39,7 +40,6 @@
 * **(Scan hosts that are on your current subnet)** go run /root/go/src/github.com/Gandosha/HaGashash/main.go -subnet=true -interface=enp0s3 -project=example3
 * **(Scan hosts in all subnets)** go run /root/go/src/github.com/Gandosha/HaGashash/main.go -subnets=true -interface=enp0s3 -project=example3
 
-The tool outputs files in target's directory that can be useful for further enumeration / exploitation.
 
 **My implementation sucks? Feel free to:**
 * Not use it.
