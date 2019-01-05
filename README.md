@@ -1,6 +1,7 @@
 # HaGashash
-*A concurrent basic script scanner that relies on Nmap, CeWL, Gobuster and Nikto.*
-*It outputs files in target's directory, that can be useful for further enumeration / exploitation.*
+A concurrent basic script scanner that relies on Nmap, CeWL, Gobuster and Nikto.
+
+It outputs files in target's directory, that can be useful for further enumeration / exploitation.
 
 **Tested on:**
 - Kali linux x64 2018.4
