@@ -167,18 +167,18 @@ func UDPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 	workgroup.Done()
 }
 
-/* This function performs a web application vulnerability scan against a target (protocol://IP:port). */
+/* This function performs a web application vulnerability scan against a target (protocol://IP:port/directory). */
 func WebScan(protocol string, targetIP string, outputPath string, port2scan string) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + ":" + port2scan + " for web application vulnerabilities.\n\n")
 	//Initiate cewl
-	color.Green("\n\n[!] CeWL initiated on: ",protocol + "://" + targetIP + ":" + port2scan + ".\n\n")
+	color.Green("\n\n[!] CeWL initiated on: " + protocol + "://" + targetIP + ":" + port2scan + ".\n\n")
 	cewlCmd := exec.Command("bash", "-c", "cewl -m 1 -w " + outputPath + "/cewl_out_" + port2scan + "_" + protocol + " --with-numbers -a --meta_file " + outputPath + "/cewl_metadata_out_" + port2scan + "_" + protocol + " -e --email_file " + outputPath + "/cewl_emails_out_" + port2scan + "_" + protocol + " " + protocol + "://" + targetIP + ":" + port2scan + " && cat " + outputPath + "/cewl_* >> " + outputPath + "/gobuster_wordlist_" + port2scan + " && cat /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt >> " + outputPath + "/gobuster_wordlist_" + port2scan)
     	err := cewlCmd.Run()
     	if err != nil {
         	panic(err)
     	}
 	//Initiate gobuster using cewl's output and /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
-	color.Green("\n\n[!] Gobuster initiated on: ",protocol + "://" + targetIP + ":" + port2scan + ".\n\n")
+	color.Green("\n\n[!] Gobuster initiated on: " + protocol + "://" + targetIP + ":" + port2scan + ".\n\n")
 	gobusterCmd := exec.Command("bash", "-c", "gobuster -w " + outputPath + "/gobuster_wordlist_" + port2scan + " -o " + outputPath + "/gobuster_out_" + port2scan + " -u " + protocol + "://" + targetIP + ":" + port2scan + " -f -r -k -n")
     	err = gobusterCmd.Run()
     	if err != nil {
@@ -193,8 +193,8 @@ func WebScan(protocol string, targetIP string, outputPath string, port2scan stri
 	}
 	switch {
 		case fileInfo.Size() == 0:
-			color.Green("\n\n[!] Nikto initiated on: ",protocol + "://" + targetIP + ":" + port2scan + ".\n\n")
-			niktoCmd := exec.Command("bash", "-c", "nikto -h " + protocol + "://" + targetIP + ":" + port2scan + " -Tuning x12567> " + outputPath + "/nikto_scan_out_" + port2scan)
+			color.Green("\n\n[!] Nikto initiated on: " + protocol + "://" + targetIP + ":" + port2scan + ".\n\n")
+			niktoCmd := exec.Command("bash", "-c", "nikto -h " + protocol + "://" + targetIP + ":" + port2scan + " -Tuning x12567 >> " + outputPath + "/nikto_scan_out_" + port2scan)
 			err = niktoCmd.Run()
 		    	if err != nil {
 				panic(err)
@@ -207,8 +207,8 @@ func WebScan(protocol string, targetIP string, outputPath string, port2scan stri
 			scanner := bufio.NewScanner(dirsFile)
 			//Initiate nikto with gobuster's output (Line_by_Line)
 			for scanner.Scan() {
-				color.Green("\n\n[!] Nikto initiated on: ",protocol + "://" + targetIP + ":" + port2scan + "/" + scanner.Text() + ".\n\n")
-				niktoCmd := exec.Command("bash", "-c", "nikto -h " + protocol + "://" + targetIP + ":" + port2scan + "/" + scanner.Text() + " -Tuning x12567> " + outputPath + "/nikto_scan_out_" + port2scan + "_" + scanner.Text())
+				color.Green("\n\n[!] Nikto initiated on: " + protocol + "://" + targetIP + ":" + port2scan + scanner.Text() + ".\n\n")
+				niktoCmd := exec.Command("bash", "-c", "echo -e '" + protocol + "://" + targetIP + ":" + port2scan + scanner.Text() + "\n\n' >> " + outputPath + "/nikto_scan_out_" + port2scan + " && nikto -h " + protocol + "://" + targetIP + ":" + port2scan + scanner.Text() + " -Tuning x12567 >> " + outputPath + "/nikto_scan_out_" + port2scan)
 			    	err = niktoCmd.Run()
 			    	if err != nil {
 					panic(err)
