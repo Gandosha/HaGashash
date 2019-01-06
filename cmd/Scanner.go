@@ -155,7 +155,7 @@ func TCPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 					WebScan("http",targetIP, outputPath, port)
 				case isHTTPS == true  && isHTTP == false:
 					WebScan("https",targetIP, outputPath, port)
-				case isHTTPS == true  && isHTTP == false:
+				case isHTTPS == false  && isHTTP == false:
 					break	
 			}
 			
