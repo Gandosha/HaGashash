@@ -137,7 +137,8 @@ func TCPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 			answer, portnum, dat, commaIndex = PortExtractor(dat,service2export)
 			sliceOfPorts = append(sliceOfPorts,portnum)
 		}
-		color.Yellow("\n\n[!] Web application ports to be scanned on " + targetIP + " are: ",sliceOfPorts)
+		fmt.Println("\n\n[!] Web application ports to be scanned on " + targetIP + " are:")
+		fmt.Println(sliceOfPorts)
 		//WebScan on extracted ports
 		for _, port := range sliceOfPorts {
 			isHTTPS = HttpsCheck(targetIP, port)
