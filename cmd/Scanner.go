@@ -157,7 +157,6 @@ func TCPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 			
 		}
 	}
-	color.Red("\n\n[+] TCP scan on " + targetIP + " is completed successfully.\n\n")
 	workgroup.Done()
 }
 
@@ -222,7 +221,7 @@ func WebScan(protocol string, targetIP string, outputPath string, port2scan stri
 			    	}
 			}
 	}
-	color.White("\n\n[+] Web application vulnerability scan on " + protocol + "://" + targetIP + ":" + port2scan + " is completed successfully.\n\n")	
+	color.White("\n\n[+] Web application vulnerability scanning on " + protocol + "://" + targetIP + ":" + port2scan + " is completed successfully.\n\n")	
 }
 
 
