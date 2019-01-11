@@ -185,15 +185,15 @@ func WebScan(protocol string, targetIP string, outputPath string, port2scan stri
     	}
 	//Initiate gobuster using cewl's output and /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
 	color.Green("\n\n[!] Gobuster initiated on: " + protocol + "://" + targetIP + ":" + port2scan + ".\n\n")
-	gobusterCmd := exec.Command("bash", "-c", "gobuster -w " + outputPath + "/gobuster_wordlist_" + protocol + "_" + port2scan + " -o " + outputPath + "/gobuster_out_" + port2scan + " -u " + protocol + "://" + targetIP + ":" + port2scan + " -f -r -k -n")
+	gobusterCmd := exec.Command("bash", "-c", "gobuster -w " + outputPath + "/gobuster_wordlist_" + protocol + "_" + port2scan + " -o " + outputPath + "/gobuster_out_" + port2scan + "_" + protocol + " -u " + protocol + "://" + targetIP + ":" + port2scan + " -f -r -k -n")
     	err = gobusterCmd.Run()
     	if err != nil {
         	panic(err)
     	}
-	/*Measure the size of /gobuster_out_" + port2scan. If it's 0 bytes, just do nikto -h [Target_IP]:[Port]
+	/*Measure the size of "/gobuster_out_" + port2scan + "_" + protocol. If it's 0 bytes, just do nikto -h [Target_IP]:[Port]
 	Stat returns file info. It will return an error if there is no file. */
 	var fileInfo os.FileInfo
-	fileInfo, err = os.Stat(outputPath + "/gobuster_out_" + port2scan)
+	fileInfo, err = os.Stat(outputPath + "/gobuster_out_" + port2scan + "_" + protocol)
 	if err != nil {
 		panic(err)
 	}
@@ -207,7 +207,7 @@ func WebScan(protocol string, targetIP string, outputPath string, port2scan stri
 		    	}
 		case fileInfo.Size() > 0:
 			//Open gobuster's output file to read
-			dirsFilePath := outputPath + "/gobuster_out_" + port2scan
+			dirsFilePath := outputPath + "/gobuster_out_" + port2scan + "_" + protocol
 			dirsFile, _ := os.Open(dirsFilePath)
 			defer dirsFile.Close()
 			scanner := bufio.NewScanner(dirsFile)
