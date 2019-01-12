@@ -214,7 +214,7 @@ func WebScan(protocol string, targetIP string, outputPath string, port2scan stri
 			//Initiate nikto with gobuster's output (Line_by_Line)
 			for scanner.Scan() {
 				color.Green("\n\n[!] Nikto initiated on: " + protocol + "://" + targetIP + ":" + port2scan + scanner.Text() + ".\n\n")
-				niktoCmd := exec.Command("bash", "-c", "echo -e '\n\n" + protocol + "://" + targetIP + ":" + port2scan + scanner.Text() + "\n\n' >> " + outputPath + "/nikto_scan_out_" + port2scan + "_" + protocol + " && nikto -h " + protocol + "://" + targetIP + ":" + port2scan + scanner.Text() + " >> " + outputPath + "/nikto_scan_out_" + port2scan + "_" + protocol)
+				niktoCmd := exec.Command("bash", "-c", "echo -e '\n\n" + protocol + "://" + targetIP + ":" + port2scan + scanner.Text() + "\n\n' >> " + outputPath + "/nikto_scan_out_" + port2scan + "_" + protocol + " && nikto -h " + protocol + "://" + targetIP + ":" + port2scan + scanner.Text() + " -mutate 6 -mutate-options " + outputPath + "/gobuster_wordlist_" + port2scan + "_" + protocol + " >> " + outputPath + "/nikto_scan_out_" + port2scan + "_" + protocol)
 			    	err = niktoCmd.Run()
 			    	if err != nil {
 					panic(err)
