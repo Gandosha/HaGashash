@@ -176,6 +176,7 @@ func UDPScan(targetIP string, outputPath string, workgroup *sync.WaitGroup) {
 /* This function performs a web application vulnerability scan against a target (protocol://IP:port/directory). */
 func WebScan(protocol string, targetIP string, outputPath string, port2scan string) {
 	color.Green("\n\n[!] Starting to scan " + targetIP + ":" + port2scan + " for web application vulnerabilities.\n\n")
+	extensions := "sh,html,asp,aspx,php,php3,php4,php5,txt,shtm,shtml,phtm,phtml,jhtml,pl,jsp,cfm,cfml,py,rb,cfg,zip,pdf,gz,tar,tar.gz,tgz,doc,docx,xls,xlsx,conf" 
 	//Initiate cewl
 	color.Green("\n\n[!] CeWL initiated on: " + protocol + "://" + targetIP + ":" + port2scan + ".\n\n")
 	cewlCmd := exec.Command("bash", "-c", "cewl -m 1 -w " + outputPath + "/cewl_out_" + port2scan + "_" + protocol + " --with-numbers -a --meta_file " + outputPath + "/cewl_metadata_out_" + port2scan + "_" + protocol + " -e --email_file " + outputPath + "/cewl_emails_out_" + port2scan + "_" + protocol + " " + protocol + "://" + targetIP + ":" + port2scan + " && cat " + outputPath + "/cewl_* >> " + outputPath + "/gobuster_wordlist_" + port2scan + "_" + protocol + " && cat /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt >> " + outputPath + "/gobuster_wordlist_" + port2scan + "_" + protocol)
@@ -185,7 +186,7 @@ func WebScan(protocol string, targetIP string, outputPath string, port2scan stri
     	}
 	//Initiate gobuster using cewl's output and /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
 	color.Green("\n\n[!] Gobuster initiated on: " + protocol + "://" + targetIP + ":" + port2scan + ".\n\n")
-	gobusterCmd := exec.Command("bash", "-c", "gobuster -w " + outputPath + "/gobuster_wordlist_" + port2scan + "_" + protocol + " -o " + outputPath + "/gobuster_out_" + port2scan + "_" + protocol + " -u " + protocol + "://" + targetIP + ":" + port2scan + " -f -r -k -n")
+	gobusterCmd := exec.Command("bash", "-c", "gobuster -w " + outputPath + "/gobuster_wordlist_" + port2scan + "_" + protocol + " -x " + extensions + " -o " + outputPath + "/gobuster_out_" + port2scan + "_" + protocol + " -u " + protocol + "://" + targetIP + ":" + port2scan + " -f -r -k -n")
     	err = gobusterCmd.Run()
     	if err != nil {
         	panic(err)
