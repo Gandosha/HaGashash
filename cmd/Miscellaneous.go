@@ -57,7 +57,7 @@ func CheckIfNecessaryToolsAreExist(command string) {
 
 /* Initiate */
 func Init() {
-	tools := []string{"nmap","ifconfig","nikto","cewl"}
+	tools := []string{"nmap","ifconfig","nikto","cewl","gobuster"}
 	for i := range tools {
 		CheckIfNecessaryToolsAreExist(tools[i])
 	}
